@@ -43,6 +43,10 @@ def center(string):
     horizontal_space = (width // 2) - (string_length // 2)
     print "%s%s" % ((" " * horizontal_space), string)
 
+# NOTE: OS DEPENDENT SECTION - this basically returns a tuple containing the screen's size
+# (width,height). This code will work on Mac OS X systems and probably Linux as well, but
+# will most likely not work properly on Windows machines. If nothing else, you can replace
+# this code with a simple "return" statement that returns a hard-coded value (e.g. "return (80,24")
 def getTerminalSize():
     import os
     env = os.environ
@@ -117,6 +121,9 @@ def calc(year, month, day, hour, minute, fullscreen = False):
             if today_seconds % 2 == 0:
                 print ""
             else:
+                # NOTE: OS DEPENDENT SECTION - this commands plays an alert sound on Mac OS X machines.
+                # You will need to change it to a different command that plays a sound on Linux or Windows machines.
+                # (it can also be removed safely, but you won't hear an alert sound when it's time to claim your daily login bonus)
                 absolutely_unused_variable = os.system("afplay /System/Library/Sounds/Glass.aiff 2>/dev/null &")
                 center("*** Be sure and claim your daily Login Gift ***")
         for x in range(1, skip_lines):
@@ -189,6 +196,10 @@ def main(argv):
     else:
         if continuous_mode:
             while True:
+                # NOTE: OS DEPENDENT SECTION - this commands clears the screen. This command should work on Mac and Linux systems.
+                # For windows, you will need to change it to the following: (note, I have not tested this)
+                #   absolutely_unused_variable = os.system("cls")
+
                 absolutely_unused_variable = os.system("clear") 
                 calc(year, month, day, hour, minute, True)
                 time.sleep(1) 
