@@ -8,6 +8,8 @@ This is a set of Python scripts to help players who play the mobile rhythm game 
 Love Live School Idol Festival (SIF) is a free-to-play (with in-app purchases) rhythm and card collection game available for iOS and Android
 and is based on the [Love Live!](http://www.lovelive-anime.jp/worldwide/) media franchise.
 
+These scripts are licensed under the [MIT License](LICENSE).
+
 ## Why did you write it?
 
 Because I suck at math.
