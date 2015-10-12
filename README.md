@@ -107,9 +107,13 @@ At rank 80 you will have 65 LP and 23 friend slots.
 
 ## Bugs? Need help? Or want to chat?
 
-I wouldn't be surprised if there are any bugs, and/or if I got some of the calculations wrong. If you have any bug reports (or better yet, bug fixes!) please feel free to send them my way. Create a pull request on Github or just drop me an email.
+I wouldn't be surprised if there are any bugs, and/or if I got some of the calculations wrong. If you have any bug reports (or better yet, bug fixes!) or if you need help using these (or if you just want to say hi and/or chat) please feel free to send them my way. Create a pull request on Github or just drop me an email.
 
 Email: <dburr@DonaldBurr.com>  
 Twitter: [@dburr](https://twitter.com/dburr) (my personal Twitter account), [@otakunopodcast](https://twitter.com/otakunopodcast) (where I do most of my SIF-related tweeting)  
 Reddit: [/u/otakunopodcast](https://www.reddit.com/user/otakunopodcast/)  
-School Idol Tomodachi: [dburr](http://schoolido.lu/user/dburr/)
+School Idol Tomodachi: [dburr](http://schoolido.lu/user/dburr/)  
+SIF: /u/dburr (the "u" should be the Greek "mu", aka the u's symbol; for some reason my editor won't let me type it in).  
+EN: 767074992  
+JP: 623355455  
+Please feel free to send a friend request; if I have space on my friends list I'll be glad to add you. (Especially on JP... I don't know anyone over there... so lonely...)
