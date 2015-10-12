@@ -20,7 +20,7 @@ You will need the [Python](https://www.python.org) scripting language installed 
 
 ## The Scripts
 
-### Event Time Calculator
+### Event Time-Remaining Calculator
 
 ```
 Usage: eventcalc.py [options]
