@@ -1,5 +1,5 @@
 # SIF Tools
-A set of Pythons script to help players of [Love Live School Idol Festival](http://www.school-fes.klabgames.net)  
+A set of Pythons scripts to help players of [Love Live School Idol Festival](http://www.school-fes.klabgames.net)  
 By Donald Burr <dburr@DonaldBurr.com>
 
 ## What is this?
