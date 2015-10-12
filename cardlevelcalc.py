@@ -48,7 +48,7 @@ def check_valid_exp(rarity, level, exp):
         return_value = (exp >= 0 and exp < exp_table_ur[level])
     return return_value
 
-def calc(rarity, starting_level, starting_exp, desired_level):
+def calc_exp_for_level(rarity, starting_level, starting_exp, desired_level):
     # assumes that all values fed into it have been checked already
     required_exp = 0
     # desired_level+1 because python ranges are not inclusive :P
@@ -70,6 +70,39 @@ def calc(rarity, starting_level, starting_exp, desired_level):
     number_of_n_cards = (required_exp // 100) + 1
     print "(the equivalent of about %d level-1 N cards fed to it)" % number_of_n_cards
 
+def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
+    current_exp = starting_exp
+    level_cap = 0
+    if rarity == "N":
+        level_cap = level_cap_n
+    elif rarity == "R":
+        level_cap = level_cap_r
+    elif rarity == "SR":
+        level_cap = level_cap_sr
+    elif rarity == "UR":
+        level_cap = level_cap_ur
+    for level in range(starting_level+1, level_cap+1):
+        if rarity == "N":
+            current_exp = current_exp + exp_table_n[level]
+        elif rarity == "R":
+            current_exp = current_exp + exp_table_r[level]
+        elif rarity == "SR":
+            current_exp = current_exp + exp_table_sr[level]
+        elif rarity == "UR":
+            current_exp = current_exp + exp_table_ur[level]
+        #print "WE ARE AT LEVEL %d and we need %d exp" % (level, required_exp)
+        if current_exp > level_for_exp:
+            level = level - 1
+            break
+    if level > starting_level:
+        if level == level_cap:
+            max_level_string = " (MAX LEVEL!)"
+        else:
+            max_level_string = ""
+        print "If you feed a %s card at level %d (with %d EXP) a total of %d EXP,\nit will end up at level %d.%s" % (rarity, starting_level, starting_exp, level_for_exp, level, max_level_string)
+    else:
+        print "Feeding %d EXP to a level %d %s card (with %d EXP) is not sufficient to\nlevel it up." % (level_for_exp, starting_level, rarity, starting_exp)
+
 def usage():
     print "Usage: %s [options]" % os.path.basename(__file__)
     print "where [options] can be one or more of:"
@@ -77,16 +110,25 @@ def usage():
     print "[-r | --rarity]          Card's rarity (REQUIRED, must be one of: N, R, SR, UR)"
     print "[-l | --starting-level]  Card's starting level (REQUIRED)"
     print "[-e | --starting-exp]    Card's starting EXP (optional, defaults to 0)"
-    print "[-L | --desired-level]   Card's desired level (optional, defaults to max level)"
+    print ""
+    print "Plus one of the following:"
+    print ""
+    print "TO CALCULATE AMOUNT OF EXP NEEDED TO GET TO A LEVEL:"
+    print "[-L | --desired-level]   Card's desired level"
+    print ""
+    print "TO CALCULATE WHAT LEVEL A GIVEN AMOUNT OF XP WILL GET YOU TO:"
+    print "[-x | --level-for-exp]   Calculate level that card will be at given EXP"
 
 def main(argv):
     rarity = None
     starting_level = None
     desired_level = None
+    level_for_exp = None
     starting_exp = 0
     try:                                
-        options, remainder = getopt.getopt(argv, "Hr:l:e:L:", ["help", "rarity=", "starting-level=", "starting-exp=", "desired-level="])
+        options, remainder = getopt.getopt(argv, "Hr:l:e:L:x:", ["help", "rarity=", "starting-level=", "starting-exp=", "desired-level=", "level-for-exp="])
     except getopt.GetoptError:
+        print "HEY"
         usage()
         sys.exit(2)                     
     for opt, arg in options:
@@ -101,6 +143,8 @@ def main(argv):
             starting_exp = int(arg)
         elif opt in ('-L', '--desired-level'):
             desired_level = int(arg)
+        elif opt in ('-x', '--level-for-exp'):
+            level_for_exp = int(arg)
 
     # first validate rarity
     if rarity is None:
@@ -126,34 +170,34 @@ def main(argv):
         sys.exit(1)
 
     # now validate starting level
-    if desired_level is None:
-        if rarity == "N":
-            desired_level = level_cap_n
-        elif rarity == "R":
-            desired_level = level_cap_r
-        elif rarity == "SR":
-            desired_level = level_cap_sr
-        elif rarity == "UR":
-            desired_level = level_cap_ur
-    elif not check_level_cap(rarity, desired_level):
-        print "Error: invalid desired level: %d" % desired_level
+    if desired_level is None and level_for_exp is None:
+        print "Error: you must choose one of -L or -x."
         usage()
         sys.exit(1)
+
+    # determine mode
+    if desired_level is not None:
+        if not check_level_cap(rarity, desired_level):
+            print "Error: invalid desired level: %d" % desired_level
+            usage()
+            sys.exit(1)
+            
+        # now do start+desired levels make sense?
+        if desired_level <= starting_level:
+            print "Error: desired level must be greater than starting level"
+            usage()
+            sys.exit(1)
         
-    # now do start+desired levels make sense?
-    if desired_level <= starting_level:
-        print "Error: desired level must be greater than starting level"
-        usage()
-        sys.exit(1)
-    
-    # finally check to see if exp makes sense (can't be >= the number of exp for the next level)
-    if not check_valid_exp(rarity, desired_level, starting_exp):
-        print "Error: invalid EXP (%d)" % starting_exp
-        usage()
-        sys.exit(1)
-        
-    # all is well, go for it
-    calc(rarity, starting_level, starting_exp, desired_level)
+        # finally check to see if exp makes sense (can't be >= the number of exp for the next level)
+        if not check_valid_exp(rarity, desired_level, starting_exp):
+            print "Error: invalid EXP (%d)" % starting_exp
+            usage()
+            sys.exit(1)
+            
+        # all is well, go for it
+        calc_exp_for_level(rarity, starting_level, starting_exp, desired_level)
+    elif level_for_exp is not None:
+        calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp)
 
 ### main script starts here
 
