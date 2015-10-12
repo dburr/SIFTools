@@ -105,7 +105,7 @@ EASY (1958)  NORMAL (904)  HARD (511)  EXPERT (284)
 At rank 80 you will have 65 LP and 23 friend slots.
 ```
 
-## Love Gem (aka loveca) Calculator
+### Love Gem (aka loveca) Calculator
 
 ```
 Usage: gemcalc.py [options]
