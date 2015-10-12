@@ -150,7 +150,6 @@ def main(argv):
     try:                                
         options, remainder = getopt.getopt(argv, "Hr:l:e:L:x:", ["help", "rarity=", "starting-level=", "starting-exp=", "desired-level=", "level-for-exp="])
     except getopt.GetoptError:
-        print "HEY"
         usage()
         sys.exit(2)                     
     for opt, arg in options:
