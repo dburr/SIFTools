@@ -117,7 +117,7 @@ where [options] can be one or more of:
 Plus one of the following:
 
 TO CALCULATE NUMBER OF LOVE GEMS YOU'LL HAVE ON A GIVEN DATE:
-[-d | --date]          Date to calculate gem count for
+[-d | --date]          Date to calculate gem count for (MM/DD/YYYY)
 
 TO CALCULATE HOW LONG UNTIL YOU WILL GET A CERTAIN NUMBER OF GEMS:
 [-G | --desired-gems]  Calculate level that card will be at given EXP

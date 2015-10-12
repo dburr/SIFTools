@@ -131,7 +131,7 @@ def usage():
     print "Plus one of the following:"
     print ""
     print "TO CALCULATE NUMBER OF LOVE GEMS YOU'LL HAVE ON A GIVEN DATE:"
-    print "[-d | --date]          Date to calculate gem count for"
+    print "[-d | --date]          Date to calculate gem count for (MM/DD/YYYY)"
     print ""
     print "TO CALCULATE HOW LONG UNTIL YOU WILL GET A CERTAIN NUMBER OF GEMS:"
     print "[-G | --desired-gems]  Calculate level that card will be at given EXP"
