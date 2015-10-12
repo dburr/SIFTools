@@ -35,7 +35,7 @@ where [options] can be one or more of:
 Note: event time should be specified in UTC.
 ```
 
-Example: to calculate the time remaining for an event that ends on October 22 at 8 AM:
+Example: to calculate the time remaining for an event that ends on October 22 at 8 AM UTC:
 
 ```
 $ eventcalc.py -M 10 -d 22 -h 8
