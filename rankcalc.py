@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
 # Rank-up requirements (EXP) calculator
+#
 # Part of SIFTools <https://github.com/dburr/SIFTools/>
 # By Donald Burr <dburr@DonaldBurr.com>
 # Copyright (c) 2015 Donald Burr.

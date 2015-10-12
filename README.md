@@ -12,7 +12,7 @@ These scripts are licensed under the [MIT License](LICENSE).
 
 ## Why did you write it?
 
-Because I suck at math.
+Because I suck at math. (OK, not really. I just hate it. With a burning passion. Besides, computers were created so that we don't have to deal with crap like this.)
 
 ## How do I use it?
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
 # Event time-remaining calculator
+#
 # Part of SIFTools <https://github.com/dburr/SIFTools/>
 # By Donald Burr <dburr@DonaldBurr.com>
 # Copyright (c) 2015 Donald Burr.
