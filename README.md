@@ -105,9 +105,83 @@ EASY (1958)  NORMAL (904)  HARD (511)  EXPERT (284)
 At rank 80 you will have 65 LP and 23 friend slots.
 ```
 
-## Bugs? Need help? Or want to chat?
+## Love Gem (aka loveca) Calculator
 
-I wouldn't be surprised if there are any bugs, and/or if I got some of the calculations wrong. If you have any bug reports (or better yet, bug fixes!) or if you need help using these (or if you just want to say hi and/or chat) please feel free to send them my way. Create a pull request on Github or just drop me an email.
+```
+Usage: gemcalc.py [options]
+where [options] can be one or more of:
+[-H | --help]          Print this help message
+[-g | --current-gems]  Current number of love gems (optional, default=0)
+[-v | --verbose]       Verbosely print out when gems are collected
+
+Plus one of the following:
+
+TO CALCULATE NUMBER OF LOVE GEMS YOU'LL HAVE ON A GIVEN DATE:
+[-d | --date]          Date to calculate gem count for
+
+TO CALCULATE HOW LONG UNTIL YOU WILL GET A CERTAIN NUMBER OF GEMS:
+[-G | --desired-gems]  Calculate level that card will be at given EXP
+```
+
+Example: How many love gems will you have on Christmas?
+
+```
+$ gemcalc.py -d 12/25/2015 -v
+Today is 10/12/2015 and you currently have 0 love gems.
+(Assuming you collected any gems you got today and already counted those.)
+10/16/2015: free gem as login bonus, which brings you to 1 gems.
+10/21/2015: free gem as login bonus AND it's Eli's birthday! You get 6 gems, which brings you to 7 gems.
+10/26/2015: free gem as login bonus, which brings you to 8 gems.
+10/30/2015: free gem as login bonus, which brings you to 9 gems.
+11/01/2015: free gem as login bonus AND it's Rin's birthday! You get 6 gems, which brings you to 15 gems.
+11/06/2015: free gem as login bonus, which brings you to 16 gems.
+11/11/2015: free gem as login bonus, which brings you to 17 gems.
+11/16/2015: free gem as login bonus, which brings you to 18 gems.
+11/21/2015: free gem as login bonus, which brings you to 19 gems.
+11/26/2015: free gem as login bonus, which brings you to 20 gems.
+11/30/2015: free gem as login bonus, which brings you to 21 gems.
+12/01/2015: free gem as login bonus, which brings you to 22 gems.
+12/06/2015: free gem as login bonus, which brings you to 23 gems.
+12/11/2015: free gem as login bonus, which brings you to 24 gems.
+12/16/2015: free gem as login bonus, which brings you to 25 gems.
+12/21/2015: free gem as login bonus, which brings you to 26 gems.
+You will have 26 love gems on 12/25/2015. Good things come to those who wait!
+```
+
+Example: You have 18 love gems now. When will you be able to do a 10+1 scout (i.e. have at least 50 gems)?
+
+```
+$ gemcalc.py -g 18 -G 50 -v
+Today is 10/12/2015 and you currently have 18 love gems.
+(Assuming you collected any gems you got today and already counted those.)
+10/16/2015: free gem as login bonus, which brings you to 19 gems.
+10/21/2015: free gem as login bonus AND it's Eli's birthday! You get 6 gems, which brings you to 25 gems.
+10/26/2015: free gem as login bonus, which brings you to 26 gems.
+10/30/2015: free gem as login bonus, which brings you to 27 gems.
+11/01/2015: free gem as login bonus AND it's Rin's birthday! You get 6 gems, which brings you to 33 gems.
+11/06/2015: free gem as login bonus, which brings you to 34 gems.
+11/11/2015: free gem as login bonus, which brings you to 35 gems.
+11/16/2015: free gem as login bonus, which brings you to 36 gems.
+11/21/2015: free gem as login bonus, which brings you to 37 gems.
+11/26/2015: free gem as login bonus, which brings you to 38 gems.
+11/30/2015: free gem as login bonus, which brings you to 39 gems.
+12/01/2015: free gem as login bonus, which brings you to 40 gems.
+12/06/2015: free gem as login bonus, which brings you to 41 gems.
+12/11/2015: free gem as login bonus, which brings you to 42 gems.
+12/16/2015: free gem as login bonus, which brings you to 43 gems.
+12/21/2015: free gem as login bonus, which brings you to 44 gems.
+12/26/2015: free gem as login bonus, which brings you to 45 gems.
+12/30/2015: free gem as login bonus, which brings you to 46 gems.
+01/01/2016: free gem as login bonus, which brings you to 47 gems.
+01/06/2016: free gem as login bonus, which brings you to 48 gems.
+01/11/2016: free gem as login bonus, which brings you to 49 gems.
+01/16/2016: free gem as login bonus, which brings you to 50 gems.
+You will have 50 love gems on 01/16/2016. Good things come to those who wait!
+```
+
+## Bugs? Need help? Got any suggestions/ideas for new features? Or want to chat?
+
+I wouldn't be surprised if there are any bugs, and/or if I got some of the calculations wrong. If you have any bug reports (or better yet, bug fixes!), suggestions/ideas for new features, or if you need help using these (or if you just want to say hi and/or chat) please feel free to send them my way. Create a pull request on Github or just drop me an email.
 
 Email: <dburr@DonaldBurr.com>  
 Twitter: [@dburr](https://twitter.com/dburr) (my personal Twitter account), [@otakunopodcast](https://twitter.com/otakunopodcast) (where I do most of my SIF-related tweeting)  
