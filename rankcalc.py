@@ -43,7 +43,7 @@ def calc(game_version, starting_rank, starting_exp, desired_rank):
     required_exp = required_exp - starting_exp
     print "To get from rank %d (with %d EXP) to rank %d on %s requires %d EXP." % (starting_rank, starting_exp, desired_rank, game_version, required_exp)
     print "Equivalent to playing the following number of songs of difficulty level:"
-    # round up because you can't play half of a song (although you can play a song half-assedly :P)
+    # round up because you can't play half of a song (although you can play a song half-assedly :P and I often do :P)
     easy_count = (required_exp // 12) + 1
     normal_count = (required_exp // 26) + 1
     hard_count = (required_exp // 46) + 1
