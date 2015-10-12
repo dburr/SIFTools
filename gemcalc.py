@@ -134,7 +134,7 @@ def usage():
     print "[-d | --date]          Date to calculate gem count for (MM/DD/YYYY)"
     print ""
     print "TO CALCULATE HOW LONG UNTIL YOU WILL GET A CERTAIN NUMBER OF GEMS:"
-    print "[-G | --desired-gems]  Calculate level that card will be at given EXP"
+    print "[-G | --desired-gems]  Calculate date when you will have that number of gems"
 
 def main(argv):
     current_gems = 0

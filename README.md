@@ -120,7 +120,7 @@ TO CALCULATE NUMBER OF LOVE GEMS YOU'LL HAVE ON A GIVEN DATE:
 [-d | --date]          Date to calculate gem count for (MM/DD/YYYY)
 
 TO CALCULATE HOW LONG UNTIL YOU WILL GET A CERTAIN NUMBER OF GEMS:
-[-G | --desired-gems]  Calculate level that card will be at given EXP
+[-G | --desired-gems]  Calculate date when you will have that number of gems
 ```
 
 Example: How many love gems will you have on Christmas?
