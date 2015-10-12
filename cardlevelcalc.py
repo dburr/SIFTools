@@ -66,11 +66,9 @@ def calc(rarity, starting_level, starting_exp, desired_level):
     required_exp = required_exp - starting_exp
     # now tell the user
     print "To get a %s card from level %d (with %d EXP) to %d requires %d EXP." % (rarity, starting_level, starting_exp, desired_level, required_exp)
-    # calculate equivalent N cards
-    number_of_n_cards = required_exp // 100
-    if number_of_n_cards == 0:
-        number_of_n_cards = 1
-    print "(the equivalent of approx. %d level-1 N cards fed to it)" % number_of_n_cards
+    # calculate equivalent N cards (round up because we can't feed half of a card)
+    number_of_n_cards = (required_exp // 100) + 1
+    print "(the equivalent of about %d level-1 N cards fed to it)" % number_of_n_cards
 
 def usage():
     print "Usage: %s [options]" % os.path.basename(__file__)
@@ -79,7 +77,7 @@ def usage():
     print "[-r | --rarity]          Card's rarity (REQUIRED, must be one of: N, R, SR, UR)"
     print "[-l | --starting-level]  Card's starting level (REQUIRED)"
     print "[-e | --starting-exp]    Card's starting EXP (optional, defaults to 0)"
-    print "[-L | --desired-level]   Card's desired level (REQUIRED)"
+    print "[-L | --desired-level]   Card's desired level (optional, defaults to max level)"
 
 def main(argv):
     rarity = None
@@ -129,9 +127,14 @@ def main(argv):
 
     # now validate starting level
     if desired_level is None:
-        print "Error: must specify desired level"
-        usage()
-        sys.exit(1)
+        if rarity == "N":
+            desired_level = level_cap_n
+        elif rarity == "R":
+            desired_level = level_cap_r
+        elif rarity == "SR":
+            desired_level = level_cap_sr
+        elif rarity == "UR":
+            desired_level = level_cap_ur
     elif not check_level_cap(rarity, desired_level):
         print "Error: invalid desired level: %d" % desired_level
         usage()
