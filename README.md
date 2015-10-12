@@ -35,6 +35,19 @@ where [options] can be one or more of:
 Note: event time should be specified in UTC.
 ```
 
+Example: to calculate the time remaining for an event that ends on October 22 at 8 AM:
+
+```
+$ eventcalc.py -M 10 -d 22 -h 8
+  Current time: 2015-10-12 11:21:37 UTC
+    Event ends: 2015-10-22 08:00:00 UTC
+Time remaining: 236:38:22 (9d20h38m)
+```
+
+You can add the `-c` flag to create a continuously-updating display. This is quite handy to leave running up in the corner of your screen while an event is in progress.
+
+Note that this script has some commands in it specific to Mac OS X systems and may need to be slightly modified if you're on a different type of system (Windows or Linux.) I have marked those portions of code with comments.
+
 ### Card Level-up Calculator
 
 ```
@@ -54,6 +67,22 @@ TO CALCULATE WHAT LEVEL A GIVEN AMOUNT OF XP WILL GET YOU TO:
 [-x | --level-for-exp]   Calculate level that card will be at given EXP
 ```
 
+Example: Find out how much EXP you need to level up an SR card from level 20 (and 270 EXP) to level 40:
+
+```
+$ cardlevelcalc.py -r sr -l 20 -e 270 -L 40
+To get a SR card from level 20 (with 270 EXP) to 40 requires 8175 EXP.
+(the equivalent of about 82 level-1 N cards fed to it)
+```
+
+Example: you have 2100 EXP's worth of cards to feed to your level-38 UR (with 502 EXP.) What level will that get you to?
+
+```
+$ cardlevelcalc.py -r ur -l 38 -e 502 -x 2100
+If you feed a UR card at level 38 (with 502 EXP) a total of 2100 EXP,
+it will end up at level 40.
+```
+
 ### Rank Up Calculator
 
 ```
@@ -65,3 +94,22 @@ where [options] can be one or more of:
 [-e | --starting-exp]   Starting EXP (optional, defaults to 0)
 [-R | --desired-rank]   Desired rank (REQUIRED, must be >= starting-rank)
 ```
+
+Example: you are at rank 68 with 283 EXP. What will you need to get to rank 80?
+
+```
+$ rankcalc.py -g en -r 68 -e 283 -R 80
+To get from rank 68 (with 283 EXP) to rank 80 on EN requires 23491 EXP.
+Equivalent to playing the following number of songs of difficulty level:
+EASY (1958)  NORMAL (904)  HARD (511)  EXPERT (284)
+At rank 80 you will have 65 LP and 23 friend slots.
+```
+
+## Bugs? Need help? Or want to chat?
+
+I wouldn't be surprised if there are any bugs, and/or if I got some of the calculations wrong. If you have any bug reports (or better yet, bug fixes!) please feel free to send them my way. Create a pull request on Github or just drop me an email.
+
+Email: <dburr@DonaldBurr.com>  
+Twitter: [@dburr](https://twitter.com/dburr) (my personal Twitter account), [@otakunopodcast](https://twitter.com/otakunopodcast) (where I do most of my SIF-related tweeting)  
+Reddit: [/u/otakunopodcast](https://www.reddit.com/user/otakunopodcast/)  
+School Idol Tomodachi: [dburr](http://schoolido.lu/user/dburr/)
