@@ -37,38 +37,19 @@ exp_table_r = [-1, 0, 14, 31, 45, 55, 67, 76, 85, 94, 103, 110, 119, 125, 134, 1
 exp_table_sr = [-1, 0, 54, 98, 127, 150, 169, 187, 203, 218, 232, 245, 257, 269, 281, 291, 302, 311, 322, 331, 340, 349, 358, 366, 374, 383, 391, 398, 406, 413, 421, 428, 435, 442, 449, 456, 462, 469, 475, 482, 488, 494, 500, 507, 512, 518, 524, 530, 536, 541, 547, 552, 558, 563, 568, 574, 579, 584, 590, 594, 600, 605, 609, 615, 619, 625, 629, 634, 639, 643, 648, 653, 657, 662, 667, 670, 676, 680, 684, 689, 693]
 exp_table_ur = [-1, 0, 201, 294, 345, 382, 411, 438, 460, 481, 499, 517, 532, 547, 561, 574, 587, 598, 611, 621, 631, 642, 651, 661, 670, 679, 687, 696, 704, 712, 720, 727, 734, 742, 749, 755, 763, 769, 775, 782, 788, 794, 800, 806, 812, 818, 823, 829, 834, 840, 845, 850, 856, 860, 866, 870, 875, 880, 885, 890, 894, 899, 903, 908, 912, 917, 921, 925, 930, 933, 938, 942, 946, 950, 954, 959, 961, 966, 970, 974, 977, 981, 985, 988, 992, 996, 999, 1003, 1006, 1010, 1013, 1017, 1020, 1024, 1027, 1030, 1034, 1037, 1040, 1043, 1047]
 
+rarities = ["N", "R", "SR", "UR"]
+
 # max levels
 # note we don't check whether the card is idolized or not
 # we assume that the user knows what they're doing
-level_cap_n = 40
-level_cap_r = 60
-level_cap_sr = 80
-level_cap_ur = 100
+level_caps = {r: 40 + 20*rarities.index(r) for r in rarities}
 
 def check_level_cap(rarity, level):
-    return_value = False
-    if level >= 1:
-        if rarity == "N":
-            return_value = (level <= level_cap_n)
-        elif rarity == "R":
-            return_value = (level <= level_cap_r)
-        elif rarity == "SR":
-            return_value = (level <= level_cap_sr)
-        elif rarity == "UR":
-            return_value = (level <= level_cap_ur)
-    return return_value
+    return level <= level_caps[rarity]
 
 def check_valid_exp(rarity, level, exp):
-    return_value = False
-    if rarity == "N" and check_level_cap(rarity, level):
-        return_value = (exp >= 0 and exp < exp_table_n[level])
-    elif rarity == "R" and check_level_cap(rarity, level):
-        return_value = (exp >= 0 and exp < exp_table_r[level])
-    elif rarity == "SR" and check_level_cap(rarity, level):
-        return_value = (exp >= 0 and exp < exp_table_sr[level])
-    elif rarity == "UR" and check_level_cap(rarity, level):
-        return_value = (exp >= 0 and exp < exp_table_ur[level])
-    return return_value
+    return (rarity in rarities and check_level_cap(rarity, level)
+            and exp >= 0 and exp < exp_table_n[level])
 
 def calc_exp_for_level(rarity, starting_level, starting_exp, desired_level):
     # assumes that all values fed into it have been checked already
@@ -94,15 +75,7 @@ def calc_exp_for_level(rarity, starting_level, starting_exp, desired_level):
 
 def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
     current_exp = starting_exp
-    level_cap = 0
-    if rarity == "N":
-        level_cap = level_cap_n
-    elif rarity == "R":
-        level_cap = level_cap_r
-    elif rarity == "SR":
-        level_cap = level_cap_sr
-    elif rarity == "UR":
-        level_cap = level_cap_ur
+    level_cap = level_caps[rarity]
     for level in range(starting_level+1, level_cap+1):
         if rarity == "N":
             current_exp = current_exp + exp_table_n[level]
