@@ -80,8 +80,8 @@ def validate(date_text):
 def calc_gems_on_date(current_gems, target_date, verbose=False):
     now = datetime.datetime.now()
     target_datetime = datetime.datetime.strptime(target_date, '%m/%d/%Y')
-    print "Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, current_gems)
-    print "(Assuming you collected any gems you got today and already counted those.)"
+    print("Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, current_gems))
+    print("(Assuming you collected any gems you got today and already counted those.)")
     gems = current_gems
     now = now + timedelta(days=1)
     while now < target_datetime:
@@ -92,18 +92,18 @@ def calc_gems_on_date(current_gems, target_date, verbose=False):
             gems = gems + 5
         if verbose:
             if is_gem_day(now.day) and is_bday:
-                print "%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
+                print("%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems))
             elif is_gem_day(now.day):
-                print "%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems." % (now.month, now.day, now.year, gems)
+                print("%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems." % (now.month, now.day, now.year, gems))
             elif is_bday:
-                print "%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
+                print("%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems))
         now = now + timedelta(days=1)
-    print "You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, target_datetime.month, target_datetime.day, target_datetime.year)
+    print("You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, target_datetime.month, target_datetime.day, target_datetime.year))
 
 def calc_desired_gems(current_gems, desired_gems, verbose=False):
     now = datetime.datetime.now()
-    print "Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, current_gems)
-    print "(Assuming you collected any gems you got today and already counted those.)"
+    print("Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, current_gems))
+    print("(Assuming you collected any gems you got today and already counted those.)")
     gems = current_gems
     while gems < desired_gems:
         now = now + timedelta(days=1)
@@ -114,27 +114,27 @@ def calc_desired_gems(current_gems, desired_gems, verbose=False):
             gems = gems + 5
         if verbose:
             if is_gem_day(now.day) and is_bday:
-                print "%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
+                print("%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems))
             elif is_gem_day(now.day):
-                print "%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems." % (now.month, now.day, now.year, gems)
+                print("%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems." % (now.month, now.day, now.year, gems))
             elif is_bday:
-                print "%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
-    print "You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, now.month, now.day, now.year)
+                print("%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems))
+    print("You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, now.month, now.day, now.year))
     
 def usage():
-    print "Usage: %s [options]" % os.path.basename(__file__)
-    print "where [options] can be one or more of:"
-    print "[-H | --help]          Print this help message"
-    print "[-g | --current-gems]  Current number of love gems (optional, default=0)"
-    print "[-v | --verbose]       Verbosely print out when gems are collected"
-    print ""
-    print "Plus one of the following:"
-    print ""
-    print "TO CALCULATE NUMBER OF LOVE GEMS YOU'LL HAVE ON A GIVEN DATE:"
-    print "[-d | --date]          Date to calculate gem count for (MM/DD/YYYY)"
-    print ""
-    print "TO CALCULATE HOW LONG UNTIL YOU WILL GET A CERTAIN NUMBER OF GEMS:"
-    print "[-G | --desired-gems]  Calculate date when you will have that number of gems"
+    print("Usage: %s [options]" % os.path.basename(__file__))
+    print("where [options] can be one or more of:")
+    print("[-H | --help]          Print this help message")
+    print("[-g | --current-gems]  Current number of love gems (optional, default=0)")
+    print("[-v | --verbose]       Verbosely print out when gems are collected")
+    print("")
+    print("Plus one of the following:")
+    print("")
+    print("TO CALCULATE NUMBER OF LOVE GEMS YOU'LL HAVE ON A GIVEN DATE:")
+    print("[-d | --date]          Date to calculate gem count for (MM/DD/YYYY)")
+    print("")
+    print("TO CALCULATE HOW LONG UNTIL YOU WILL GET A CERTAIN NUMBER OF GEMS:")
+    print("[-G | --desired-gems]  Calculate date when you will have that number of gems")
 
 def main(argv):
     current_gems = 0
@@ -166,13 +166,13 @@ def main(argv):
             calc_gems_on_date(current_gems, target_date, verbose)
     elif desired_gems is not None:
         if desired_gems <= current_gems:
-            print "Error: desired gems must be greater than current gems"
+            print("Error: desired gems must be greater than current gems")
             usage()
             sys.exit(0)
         else:
             calc_desired_gems(current_gems, desired_gems, verbose)
     else:
-        print "Error: must specify either -d or -G."
+        print("Error: must specify either -d or -G.")
         usage()
         sys.exit(2)
 
