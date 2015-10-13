@@ -132,10 +132,10 @@ function event_end_calc_tab_selected()
 function calculate_rank()
 {
     // validate data
-    var current_rank = $("#current_rank").val();
-    var current_exp = $("#current_exp").val();
-    var desired_rank = $("#desired_rank").val();
-    var game_version = $("#game_version").val();
+    var current_rank = parseInt($("#current_rank").val());
+    var current_exp = parseInt($("#current_exp").val());
+    var desired_rank = parseInt($("#desired_rank").val());
+    var game_version = parseInt($("#game_version").val());
     if (isNaN(current_rank) || isNaN(current_exp) || isNaN(desired_rank)) {
         window.alert("Error: you have entered an invalid (non-numeric) value. Please check your input and try again.");
     } else if (current_rank < 0 || current_exp < 0 || desired_rank < 0) {
@@ -344,18 +344,62 @@ function calculate_gems()
             $("#gem-result-verbose-area").val(verboseText);
             $("#gem-result-textarea").show();
         } else {
-            $("#gem-result-summary").text("Insert non-verbose results here");
             $("#gem-result-verbose-area").val(verboseText);
             $("#gem-result-textarea").hide();
         }
     } else if (mode === "GEMS")  {
+        var target_gems = parseInt($("#gem_desired_gems").val());
+        if (isNaN(target_gems)) {
+            window.alert("Error: you have entered an invalid (non-numeric) value. Please check your input and try again.");
+            return;
+        }
+
+        var now = moment(new Date());
+        var resultsString = sprintf("Today is %02d/%02d/%04d and you currently have %d love gems.<br />(Assuming you collected any gems you got today and already counted those.)", month(now), day(now), year(now), current_gems);
+        var verboseText = "";
+        
+        var gems = current_gems
+        
+        while (gems < target_gems) {
+            now = now.add(1, 'days')
+            
+            // is it a login bonus?
+            if (is_gem_day(now)) {
+                gems += 1;
+            }
+            
+            // is it a birthday?
+            var birthday_tuple = is_muse_members_birthday(now);
+            var is_bday = birthday_tuple[0];
+            var name = birthday_tuple[1];
+            if (is_bday) {
+                gems += 5;
+            }
+            
+            // record verbose output if desired
+            if (verbose) {
+                if (is_gem_day(now) && is_bday) {
+                    verboseText += sprintf("%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                }
+                
+                if (is_bday && !is_gem_day(now)) {
+                    verboseText += sprintf("%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                }
+                
+                if (is_gem_day(now) && !is_bday) {
+                    verboseText = verboseText + sprintf("%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems.\n", month(now), day(now), year(now), gems);
+                }
+            }
+        }
+
+        resultsString = resultsString + sprintf("<br />You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!", gems, month(now), day(now), year(now));
+        
+        $("#gem-result-summary").html(resultsString);
         if (verbose) {
-            $("#gem-result-summary").text("Insert verbose results here");
-            $("#gem-result-verbose-area").val("VERBOSITY IS GOOD!");
+            $("#gem-result-verbose-area").val(verboseText);
             $("#gem-result-textarea").show();
         } else {
-            $("#gem-result-summary").text("Insert non-verbose results here");
-            $("#gem-result-verbose-area").val("VERBOSITY IS BAD!");
+            $("#gem-result-verbose-area").val(verboseText);
             $("#gem-result-textarea").hide();
         }
     }
