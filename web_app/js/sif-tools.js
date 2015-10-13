@@ -8,7 +8,13 @@
 // bar = &#8213; &#x2015;
 
 // Set to 0 to disable debugging, 1+ to enable debugging (higher = more verbose)
-var DEBUG_LEVEL = 1;
+var DEBUG_LEVEL = 0;
+
+// EXP tables
+var exp_table_n = [-1, 0, 6, 18, 28, 40, 51, 61, 72, 82, 93, 104, 114, 124, 135, 145, 156, 165, 176, 187, 196, 207, 217, 226, 238, 247, 257, 268, 277, 288, 297, 308, 317, 328, 337, 348, 358, 367, 377, 388, 397];
+var exp_table_r = [-1, 0, 14, 31, 45, 55, 67, 76, 85, 94, 103, 110, 119, 125, 134, 140, 148, 155, 161, 168, 174, 181, 187, 193, 199, 206, 211, 217, 223, 228, 235, 240, 245, 251, 256, 262, 267, 272, 277, 283, 288, 292, 298, 303, 308, 313, 317, 323, 327, 332, 337, 342, 346, 351, 356, 360, 365, 370, 374, 378, 383];
+var exp_table_sr = [-1, 0, 54, 98, 127, 150, 169, 187, 203, 218, 232, 245, 257, 269, 281, 291, 302, 311, 322, 331, 340, 349, 358, 366, 374, 383, 391, 398, 406, 413, 421, 428, 435, 442, 449, 456, 462, 469, 475, 482, 488, 494, 500, 507, 512, 518, 524, 530, 536, 541, 547, 552, 558, 563, 568, 574, 579, 584, 590, 594, 600, 605, 609, 615, 619, 625, 629, 634, 639, 643, 648, 653, 657, 662, 667, 670, 676, 680, 684, 689, 693];
+var exp_table_ur = [-1, 0, 201, 294, 345, 382, 411, 438, 460, 481, 499, 517, 532, 547, 561, 574, 587, 598, 611, 621, 631, 642, 651, 661, 670, 679, 687, 696, 704, 712, 720, 727, 734, 742, 749, 755, 763, 769, 775, 782, 788, 794, 800, 806, 812, 818, 823, 829, 834, 840, 845, 850, 856, 860, 866, 870, 875, 880, 885, 890, 894, 899, 903, 908, 912, 917, 921, 925, 930, 933, 938, 942, 946, 950, 954, 959, 961, 966, 970, 974, 977, 981, 985, 988, 992, 996, 999, 1003, 1006, 1010, 1013, 1017, 1020, 1024, 1027, 1030, 1034, 1037, 1040, 1043, 1047];
 
 // debug logging
 function LOG(level, msg)
@@ -40,12 +46,12 @@ function setup_ui_elements()
 		active: 0,
 		create: function(event, ui) {
 			var theTab = ui.tab.index();
-			LOG(1, "INIT tab created " + theTab);
+			LOG(3, "INIT tab created " + theTab);
 			set_up_tab(theTab);
 		},
 		activate: function(event, ui) {
 			var theTab = ui.newTab.index();
-			LOG(1, "INIT tab selected " + theTab);
+			LOG(3, "INIT tab selected " + theTab);
 			set_up_tab(theTab);
 		}
 	});
@@ -54,26 +60,27 @@ function setup_ui_elements()
     $( "#gem_desired_date" ).datepicker();
     
 	// set up buttons
-	["calculate-rank", "reset-rank", "calculate-gems", "reset-gems"].forEach(function(entry) {
+	["calculate-rank", "reset-rank", "calculate-gems", "reset-gems", "calculate-card", "reset-card"].forEach(function(entry) {
 		var selector = "#button-" + entry;
-		console.log("setting up " + selector);
+		LOG(1, "setting up " + selector);
 		$(selector).button();
 	});
     
     // hide result divs
-    ["rank-calc-result-area", "gem-calc-result-area"].forEach(function(entry) {
+    ["rank-calc-result-area", "gem-calc-result-area", "card-calc-result-area"].forEach(function(entry) {
         var selector = "#" + entry;
-        console.log("setting up " + selector);
+        LOG(1, "setting up " + selector);
         $(selector).hide();
     });
     
-    // set up gem buttons
+    // set up radio button listeners
     $("input[name=gem-mode]").change(handle_gem_mode_select);
+    $("input[name=card-mode]").change(handle_card_mode_select);
     
     // hide non-selected option divs
-    ["gem-desired-gems-area"].forEach(function(entry) {
+    ["gem-desired-gems-area", "card-exp-area"].forEach(function(entry) {
         var selector = "#" + entry;
-        console.log("setting up " + selector);
+        LOG(1, "setting up " + selector);
         $(selector).hide();
     });
 }
@@ -91,6 +98,12 @@ function setup_button_handlers()
     });
     $("#button-reset-gems").click(function(evt) {
         reset_gems();
+    });
+    $("#button-calculate-card").click(function(evt) {
+        calculate_card();
+    });
+    $("#button-reset-card").click(function(evt) {
+        reset_card();
     });
 }
 
@@ -135,7 +148,7 @@ function calculate_rank()
     var current_rank = parseInt($("#current_rank").val());
     var current_exp = parseInt($("#current_exp").val());
     var desired_rank = parseInt($("#desired_rank").val());
-    var game_version = parseInt($("#game_version").val());
+    var game_version = $("#game_version").val();
     if (isNaN(current_rank) || isNaN(current_exp) || isNaN(desired_rank)) {
         window.alert("Error: you have entered an invalid (non-numeric) value. Please check your input and try again.");
     } else if (current_rank < 0 || current_exp < 0 || desired_rank < 0) {
@@ -206,6 +219,18 @@ function handle_gem_mode_select()
     } else if (mode === "GEMS") {
         $("#gem-date-area").hide();
         $("#gem-desired-gems-area").show();
+    }
+}
+
+function handle_card_mode_select()
+{
+    var mode = $(this).val();
+    if (mode === "LEVEL") {
+        $("#card-level-area").show();
+        $("#card-exp-area").hide();
+    } else if (mode === "EXP") {
+        $("#card-level-area").hide();
+        $("#card-exp-area").show();
     }
 }
 
@@ -422,6 +447,146 @@ function reset_gems()
     $("#gem-date-area").show();
 }
 
+function get_level_cap(rarity)
+{
+    if (rarity === "N") {
+        return 40;
+    } else if (rarity === "R") {
+        return 60;
+    } else if (rarity === "SR") {
+        return 80;
+    } else if (rarity === "UR") {
+        return 100;
+    }
+    // bogus return value, should never reach here
+    return -1;
+}
+
+function is_valid_level(rarity, level)
+{
+    var return_value = false;
+    if (level >= 1) {
+        return_value = (level <= get_level_cap(rarity));
+    }
+    return return_value;
+}
+
+function is_valid_exp(rarity, level, exp)
+{
+    var return_value = false;
+    if (rarity === "N" && is_valid_level(rarity, level)) {
+        return_value = (exp >= 0 && exp < exp_table_n[level+1]);
+    } else if (rarity === "R" && is_valid_level(rarity, level)) {
+        return_value = (exp >= 0 && exp < exp_table_r[level+1]);
+    } else if (rarity === "SR" && is_valid_level(rarity, level+1)) {
+        return_value = (exp >= 0 && exp < exp_table_sr[level+1]);
+    } else if (rarity === "UR" && is_valid_level(rarity, level)) {
+        return_value = (exp >= 0 && exp < exp_table_ur[level+1]);
+    }
+    return return_value
+}
+
+function calculate_card()
+{
+    var current_level = parseInt($("#card_current_level").val());
+    var current_exp = parseInt($("#card_current_exp").val());
+    var rarity = $("#card_rarity").val();
+    
+    if (isNaN(current_level) || !is_valid_level(rarity, current_level)) {
+        alert("Error: invalid level. Please check your input and try again.");
+        return;
+    }
+    if (isNaN(current_exp) || !is_valid_exp(rarity, current_level, current_exp)) {
+        alert("Error: invalid EXP. Please check your input and try again.");
+        return;
+    }
+
+    var mode = $("input[name=card-mode]:checked").val();
+    if (mode === "LEVEL")  {
+        var target_level = parseInt($("#card_desired_level").val());
+        if (isNaN(target_level) || !is_valid_level(rarity, target_level)) {
+            window.alert("Error: the desired level is invalid.");
+            return;
+        }
+                
+        // ready to rock
+        var required_exp = 0;
+        var resultsString = "";
+        for (level = current_level+1; level <= target_level; level++) {
+            if (rarity === "N") {
+                required_exp += exp_table_n[level];
+            } else if (rarity === "R") {
+                required_exp += exp_table_r[level];
+            } else if (rarity === "SR") {
+                required_exp += exp_table_sr[level];
+            } else if (rarity === "UR") {
+                required_exp += exp_table_ur[level];
+            }
+        }
+        
+        // subtract what we have
+        required_exp -= current_exp;
+        
+        var resultString = sprintf("To get a %s card from level %d (with %d EXP) to %d requires %d EXP.<br />", rarity, current_level, current_exp, target_level, required_exp);
+        
+        // calculate equiv N cards
+        var number_of_n_cards = Math.round(required_exp / 100) + 1;
+        resultString += sprintf("(the equivalent of about %d level-1 N cards fed to it)", number_of_n_cards);
+        
+        // output the result
+        $("#card-result-summary").html(resultString);
+    } else if (mode === "EXP")  {
+        var exp_to_feed = parseInt($("#card_feed_exp").val());
+        if (isNaN(exp_to_feed)) {
+            window.alert("Error: you have entered an invalid (non-numeric) value. Please check your input and try again.");
+            return;
+        }
+        
+        // ready to rock
+        var resultsString = "FOO";
+
+        // XXX do some calculating
+        var exp_tally = current_exp;
+        var level = 0;
+        for (level = current_level+1; level <= get_level_cap(rarity); level++) {
+            if (rarity === "N") {
+                exp_tally += exp_table_n[level];
+            } else if (rarity === "R") {
+                exp_tally += exp_table_r[level];
+            } else if (rarity === "SR") {
+                exp_tally += exp_table_sr[level];
+            } else if (rarity === "UR") {
+                exp_tally += exp_table_ur[level];
+            }
+            if (exp_tally > exp_to_feed) {
+                break;
+            }
+        }
+
+        level--;
+        var resultString = sprintf("If you feed a %s card at level %d (with %d EXP) a total of %d EXP,<br />it will end up at level %d.%s", rarity, current_level, current_exp, exp_to_feed, level, (level == get_level_cap(rarity) ? " (MAX LEVEL!)" : ""));
+        
+        // output the result
+        $("#card-result-summary").html(resultString);
+    }
+    
+    $("#card-calc-result-area").show();
+}
+
+function reset_card()
+{
+    $("#card-calc-result-area").hide();
+    $("#card-result-summary").text("-");
+    $("#card-level-area").hide();
+    $("#card-exp-area").hide();
+    $("#card_current_level").val(0);
+    $("#card_current_exp").val(0);
+    var $radios = $('input:radio[name=card-mode]');
+    $radios.filter('[value=LEVEL]').prop('checked', true);
+    $("#card_desired_level").val("");
+    $("#card_feed_exp").val("");
+    $("#card-level-area").show();
+}
 
 
 

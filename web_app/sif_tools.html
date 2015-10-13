@@ -82,32 +82,41 @@
     </div>
 
     <div id="tab-card-level">
-      <select id="recipes-list">
-      </select>
-      
-      <span id="button-create">
-        Create
-      </span>
-
-      <span id="button-edit">
-        Edit
-      </span>
-
-      <span id="button-delete">
-        Delete
-      </span>
+      <div id="love-gem-form" align="center">
+        Card Rarity:&nbsp;&nbsp;&nbsp;
+        <select id="card_rarity" name="card_rarity">
+          <option value="N">N</option>
+          <option value="R">R</option>
+          <option value="SR">SR</option>
+          <option value="UR">UR</option>
+        </select>
+        Current Level:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_current_level" name="card_current_level" placeholder="level" value="" />
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_current_exp" name="card_current_exp" placeholder="" value="0" />
+        <br /><br />
+        Mode:<br />
+        <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />Amount of XP needed to get to a level<br />
+        <input type="radio" name="card-mode" id="card-mode" value="EXP" />Final level after feeding an amount of EXP<br /><br />
+        <div id="card-level-area">
+        Desired level:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
+        </div>
+        <div id="card-exp-area">
+        EXP:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_feed_exp" name="card_feed_exp" placeholder="exp" value="" />
+        </div>
+        <br /><br />
+        <div id="button-calculate-card">Calculate</div>
+        <br /><br />
+        <div id="card-calc-result-area">
+          <h1>Results</h1>
+          <span id="card-result-summary">-</span><br /><br />
+          <div id="button-reset-card">Reset</div>
+        </div>
+      </div>
     </div>
 
     <div id="tab-event">
-      <table id="recipe-table" border='0'>
-        <tr>
-          <th class="remove-box">&nbsp;</th>
-          <th class="ingredient">Flavor</th>
-          <th class="slider">&nbsp;</th>
-          <th class="input-box">&nbsp;</th>
-        </tr>
-      </table>
-      <div id="button-add-flavor">+</div>
+      <div id="love-gem-form" align="center">
+        <H1>Coming Soon...</H1>
+      </div>
     </div>
 
     <div id="error-dialog" title="Error">
