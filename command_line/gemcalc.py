@@ -58,18 +58,23 @@ def calc_gems(gems, target_date, desired_gems, verbose=False):
     while ((desired_gems is None or gems < desired_gems)
             and (target_date is None or now < target_date)):
         now += timedelta(days=1)
+        plus_gems = 0
+        plus_reasons = []
+
         if is_gem_day(now.day):
-            gems += 1
+            plus_gems += 1
+            plus_reasons.append("free gem as login bonus")
+
         bday = muse_birthday_member(now.month, now.day)
         if bday is not None:
-            gems += 5
-        if verbose:
-            if is_gem_day(now.day) and bday is not None:
-                print "%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, bday, gems)
-            elif is_gem_day(now.day):
-                print "%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems." % (now.month, now.day, now.year, gems)
-            elif bday is not None:
-                print "%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, bday, gems)
+            plus_gems += 5
+            plus_reasons.append("it's %s's birthday! You get %d gems" % (bday, plus_gems))
+
+        gems += plus_gems
+        if verbose and plus_gems > 0:
+            print "%02d/%02d/%04d: %s, which brings you to %d gems." % (
+                    now.month, now.day, now.year,
+                    " AND ".join(plus_reasons), gems)
     print "You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, now.month, now.day, now.year)
 
 def usage():
