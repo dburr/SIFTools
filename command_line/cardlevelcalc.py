@@ -166,7 +166,6 @@ def main(argv):
         rarity = rarity.upper()
         if rarity != "N" and rarity != "R" and rarity != "SR" and rarity != "UR":
             print "Error: invalid rarity specified (%s)" % rarity
-            usage()
             sys.exit(1)
 
     # now validate starting level
@@ -176,32 +175,27 @@ def main(argv):
         sys.exit(1)
     elif not check_level_cap(rarity, starting_level):
         print "Error: invalid starting level: %d" % starting_level
-        usage()
         sys.exit(1)
 
     # now validate starting level
     if desired_level is None and level_for_exp is None:
         print "Error: you must choose one of -L or -x."
-        usage()
         sys.exit(1)
 
     # determine mode
     if desired_level is not None:
         if not check_level_cap(rarity, desired_level):
             print "Error: invalid desired level: %d" % desired_level
-            usage()
             sys.exit(1)
             
         # now do start+desired levels make sense?
         if desired_level <= starting_level:
             print "Error: desired level must be greater than starting level"
-            usage()
             sys.exit(1)
         
         # finally check to see if exp makes sense (can't be >= the number of exp for the next level)
         if not check_valid_exp(rarity, desired_level, starting_exp):
             print "Error: invalid EXP (%d)" % starting_exp
-            usage()
             sys.exit(1)
             
         # all is well, go for it
