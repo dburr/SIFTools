@@ -82,11 +82,7 @@ def check_valid_exp(rarity, level, exp):
 
 def calc_exp_for_level(rarity, starting_level, starting_exp, desired_level):
     # assumes that all values fed into it have been checked already
-    required_exp = 0
-    # desired_level+1 because python ranges are not inclusive on the RHS :P
-    for level in range(starting_level+1, desired_level+1):
-        required_exp += exp_tables[rarity][level]
-        #print "WE ARE AT LEVEL %d and we need %d exp" % (level, required_exp)
+    required_exp = sum(exp for exp in exp_tables[rarity][starting_level+1:desired_level+1])
     # subtract what we already have
     required_exp -= starting_exp
     # now tell the user
