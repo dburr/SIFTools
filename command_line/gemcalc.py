@@ -28,8 +28,7 @@ import os
 import sys
 import getopt
 import calendar
-import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 def muse_birthday_member(month, day):
     bdays = {
@@ -52,7 +51,7 @@ def is_gem_day(day):
     return day in (1, 6, 11, 16, 21, 26, 30)
 
 def calc_gems(gems, target_date, desired_gems, verbose=False):
-    now = datetime.datetime.now()
+    now = datetime.now()
     print "Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, gems)
     print "(Assuming you collected any gems you got today and already counted those.)"
     while ((desired_gems is None or gems < desired_gems)
@@ -124,7 +123,7 @@ def main(argv):
     if target_date is not None:
         # validate it
         try:
-            target_date = datetime.datetime.strptime(target_date, '%m/%d/%Y')
+            target_date = datetime.strptime(target_date, '%m/%d/%Y')
         except ValueError:
             raise ValueError("Incorrect date format, should be MM/DD/YYYY")
 
