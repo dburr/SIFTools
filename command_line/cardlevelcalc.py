@@ -113,7 +113,7 @@ def usage():
     print "[-l | --starting-level]  Card's starting level (REQUIRED)"
     print "[-e | --starting-exp]    Card's starting EXP (optional, defaults to 0)"
     print ""
-    print "Plus one of the following:"
+    print "Plus one of the following (default: desired level = max level)"
     print ""
     print "TO CALCULATE AMOUNT OF EXP NEEDED TO GET TO A LEVEL:"
     print "[-L | --desired-level]   Card's desired level"
