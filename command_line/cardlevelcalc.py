@@ -100,7 +100,7 @@ def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
     current_exp = starting_exp
     level_cap = level_caps[rarity]
     for level in range(starting_level+1, level_cap+1):
-        current_exp += exp_tables[rarities][level]
+        current_exp += exp_tables[rarity][level]
         #print "WE ARE AT LEVEL %d and we need %d exp" % (level, required_exp)
         if current_exp > level_for_exp:
             level -= 1
