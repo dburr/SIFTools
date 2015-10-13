@@ -93,7 +93,7 @@ def calc_exp_for_level(rarity, starting_level, starting_exp, desired_level):
     print "To get a %s card from level %d (with %d EXP) to %d requires %d EXP." \
             % (rarity, starting_level, starting_exp, desired_level, required_exp)
     # calculate equivalent N cards (round up because we can't feed half of a card)
-    number_of_n_cards = (required_exp // 100) + 1
+    number_of_n_cards = -(-required_exp // 100)
     print "(the equivalent of about %d level-1 N cards fed to it)" % number_of_n_cards
 
 def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
