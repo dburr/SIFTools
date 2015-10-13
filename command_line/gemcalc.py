@@ -54,42 +54,12 @@ def is_gem_day(day):
     else:
         return False
 
-def validate(date_text):
-    try:
-        datetime.datetime.strptime(date_text, '%m/%d/%Y')
-        return True
-    except ValueError:
-        raise ValueError("Incorrect date format, should be MM/DD/YYYY")
-
-def calc_gems_on_date(current_gems, target_date, verbose=False):
+def calc_gems(gems, target_date, desired_gems, verbose=False):
     now = datetime.datetime.now()
-    target_datetime = datetime.datetime.strptime(target_date, '%m/%d/%Y')
-    print "Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, current_gems)
+    print "Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, gems)
     print "(Assuming you collected any gems you got today and already counted those.)"
-    gems = current_gems
-    now = now + timedelta(days=1)
-    while now < target_datetime:
-        if is_gem_day(now.day):
-            gems = gems + 1
-        (is_bday, name) = is_muse_members_birthday(now.month, now.day)
-        if is_bday:
-            gems = gems + 5
-        if verbose:
-            if is_gem_day(now.day) and is_bday:
-                print "%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
-            elif is_gem_day(now.day):
-                print "%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems." % (now.month, now.day, now.year, gems)
-            elif is_bday:
-                print "%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
-        now = now + timedelta(days=1)
-    print "You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, target_datetime.month, target_datetime.day, target_datetime.year)
-
-def calc_desired_gems(current_gems, desired_gems, verbose=False):
-    now = datetime.datetime.now()
-    print "Today is %02d/%02d/%04d and you currently have %d love gems." % (now.month, now.day, now.year, current_gems)
-    print "(Assuming you collected any gems you got today and already counted those.)"
-    gems = current_gems
-    while gems < desired_gems:
+    while ((desired_gems is None or gems < desired_gems)
+            and (target_date is None or now < target_date)):
         now = now + timedelta(days=1)
         if is_gem_day(now.day):
             gems = gems + 1
@@ -104,7 +74,7 @@ def calc_desired_gems(current_gems, desired_gems, verbose=False):
             elif is_bday:
                 print "%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
     print "You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, now.month, now.day, now.year)
-    
+
 def usage():
     print "Usage: %s [options]" % os.path.basename(__file__)
     print "where [options] can be one or more of:"
@@ -143,22 +113,24 @@ def main(argv):
         elif opt in ('-v', '--verbose'):
             verbose = True
 
-    # now do something
-    if target_date is not None:
-        # validate it
-        if validate(target_date):
-            calc_gems_on_date(current_gems, target_date, verbose)
-    elif desired_gems is not None:
-        if desired_gems <= current_gems:
-            print "Error: desired gems must be greater than current gems"
-            usage()
-            sys.exit(0)
-        else:
-            calc_desired_gems(current_gems, desired_gems, verbose)
-    else:
+    if target_date is None and desired_gems is None:
         print "Error: must specify either -d or -G."
         usage()
         sys.exit(2)
+
+    # now do something
+    if target_date is not None:
+        # validate it
+        try:
+            target_date = datetime.datetime.strptime(target_date, '%m/%d/%Y')
+        except ValueError:
+            raise ValueError("Incorrect date format, should be MM/DD/YYYY")
+
+    if desired_gems is not None and desired_gems <= current_gems:
+        print "Error: desired gems must be greater than current gems"
+        sys.exit(0)
+
+    calc_gems(current_gems, target_date, desired_gems, verbose)
 
 ### main script starts here
 
