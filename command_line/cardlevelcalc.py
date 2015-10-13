@@ -177,9 +177,10 @@ def main(argv):
     if desired_level is None and level_for_exp is None:
         print "Error: you must choose one of -L or -x."
         sys.exit(1)
-
-    # determine mode
-    if desired_level is not None:
+    elif desired_level is not None and level_for_exp is not None:
+        print "Error: both -L and -x specified"
+        sys.exit(1)
+    elif desired_level is not None:
         if not check_level_cap(rarity, desired_level):
             print "Error: invalid desired level: %d" % desired_level
             sys.exit(1)
