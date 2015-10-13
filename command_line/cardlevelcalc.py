@@ -106,11 +106,7 @@ def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
             level -= 1
             break
     if level > starting_level:
-        if level == level_cap:
-            max_level_string = " (MAX LEVEL!)"
-        else:
-            max_level_string = ""
-        print "If you feed a %s card at level %d (with %d EXP) a total of %d EXP,\nit will end up at level %d.%s" % (rarity, starting_level, starting_exp, level_for_exp, level, max_level_string)
+        print "If you feed a %s card at level %d (with %d EXP) a total of %d EXP,\nit will end up at level %d.%s" % (rarity, starting_level, starting_exp, level_for_exp, level, " (MAX LEVEL!)" * (level >= level_cap))
     else:
         print "Feeding %d EXP to a level %d %s card (with %d EXP) is not sufficient to\nlevel it up." % (level_for_exp, starting_level, rarity, starting_exp)
 
