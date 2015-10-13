@@ -95,11 +95,10 @@ def calc_exp_for_level(rarity, starting_level, starting_exp, desired_level):
 def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
     current_exp = starting_exp
     level_cap = level_caps[rarity]
-    for level in range(starting_level+1, level_cap+1):
-        current_exp += exp_tables[rarity][level]
-        #print "WE ARE AT LEVEL %d and we need %d exp" % (level, required_exp)
+    for level in range(starting_level, level_cap):
+        current_exp += exp_tables[rarity][level+1]
+        #print "WE ARE AT LEVEL %d and we need %d exp" % (level, exp_tables[rarity][level])
         if current_exp > level_for_exp:
-            level -= 1
             break
     if level > starting_level:
         print "If you feed a %s card at level %d (with %d EXP) a total of %d EXP,\nit will end up at level %d.%s" % (rarity, starting_level, starting_exp, level_for_exp, level, " (MAX LEVEL!)" * (level >= level_cap))
