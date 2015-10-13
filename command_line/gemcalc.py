@@ -32,36 +32,20 @@ import datetime
 from datetime import timedelta
 
 def is_muse_members_birthday(month, day):
-    is_bday = False
-    bday_name = None
-    if month == 1 and day == 17:
-        is_bday = True
-        bday_name = "Hanayo"
-    elif month == 3 and day == 15:
-        is_bday = True
-        bday_name = "Umi"
-    elif month == 4 and day == 19:
-        is_bday = True
-        bday_name = "Maki"
-    elif month == 6 and day == 9:
-        is_bday = True
-        bday_name = "Nozomi"
-    elif month == 7 and day == 22:
-        is_bday = True
-        bday_name = "Nico"
-    elif month == 8 and day == 3:
-        is_bday = True
-        bday_name = "Honoka"
-    elif month == 9 and day == 12:
-        is_bday = True
-        bday_name = "Kotori"
-    elif month == 10 and day == 21:
-        is_bday = True
-        bday_name = "Eli"
-    elif month == 11 and day == 1:
-        is_bday = True
-        bday_name = "Rin"
-    return (is_bday, bday_name)
+    bdays = {
+        (1,17): "Hanayo",
+        (3,15): "Umi",
+        (4,19): "Maki",
+        (6,9):  "Nozomi",
+        (7,22): "Nico",
+        (8,3):  "Honoka",
+        (9,12): "Kotori",
+        (10,21):"Eli",
+        (11,1): "Rin" }
+    if (month, day) in bdays:
+        return (True, bdays[month,day])
+    else:
+        return (False, None)
 
 def is_gem_day(day):
     # according the login bonus chart, gems are given out on days numbered 1,6,11,16,21,26,30
