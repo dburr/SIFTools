@@ -44,15 +44,15 @@ def calc(game_version, starting_rank, starting_exp, desired_rank):
     print "To get from rank %d (with %d EXP) to rank %d on %s requires %d EXP." % (starting_rank, starting_exp, desired_rank, game_version, required_exp)
     print "Equivalent to playing the following number of songs of difficulty level:"
     # round up because you can't play half of a song (although you can play a song half-assedly :P and I often do :P)
-    easy_count = (required_exp // 12) + 1
-    normal_count = (required_exp // 26) + 1
-    hard_count = (required_exp // 46) + 1
-    ex_count = (required_exp // 83) + 1
+    easy_count = -(-required_exp // 12)
+    normal_count = -(-required_exp // 26)
+    hard_count = -(-required_exp // 46)
+    ex_count = -(-required_exp // 83)
     print "EASY (%d)  NORMAL (%d)  HARD (%d)  EXPERT (%d)" % (easy_count, normal_count, hard_count, ex_count)
     # calc LP
-    LP = 25 + floor(min(desired_rank, 300) / 2) + floor(max(desired_rank - 300, 0) / 3)
+    LP = 25 - (-min(desired_rank, 300) // 2) - (max(desired_rank - 300, 0) // 3)
     # calc friend slots
-    friend_slots = 10 + floor(min(desired_rank, 50) / 5) + floor(max(desired_rank - 50, 0) / 10)
+    friend_slots = 10 - (-min(desired_rank, 50) // 5) - (-max(desired_rank - 50, 0) // 10)
     # print the results
     print "At rank %d you will have %d LP and %d friend slots." % (desired_rank, LP, friend_slots)
      
