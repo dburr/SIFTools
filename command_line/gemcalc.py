@@ -49,10 +49,7 @@ def is_muse_members_birthday(month, day):
 
 def is_gem_day(day):
     # according the login bonus chart, gems are given out on days numbered 1,6,11,16,21,26,30
-    if day == 1 or day == 6 or day == 11 or day == 16 or day == 21 or day == 26 or day == 30:
-        return True
-    else:
-        return False
+    return day in (1, 6, 11, 16, 21, 26, 30)
 
 def calc_gems(gems, target_date, desired_gems, verbose=False):
     now = datetime.datetime.now()
