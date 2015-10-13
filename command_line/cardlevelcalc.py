@@ -169,14 +169,15 @@ def main(argv):
         sys.exit(1)
 
     # now validate starting level
-    if desired_level is None and level_for_exp is None:
-        print "Error: you must choose one of -L or -x."
-        sys.exit(1)
-    elif desired_level is not None and level_for_exp is not None:
+    if desired_level is not None and level_for_exp is not None:
         print "Error: both -L and -x specified"
         sys.exit(1)
-    elif desired_level is not None:
-        if not check_level_cap(rarity, desired_level):
+    elif level_for_exp is not None:
+        calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp)
+    else:
+        if desired_level is None:
+            desired_level = level_caps[rarity]
+        elif not check_level_cap(rarity, desired_level):
             print "Error: invalid desired level: %d" % desired_level
             sys.exit(1)
             
@@ -192,8 +193,6 @@ def main(argv):
             
         # all is well, go for it
         calc_exp_for_level(rarity, starting_level, starting_exp, desired_level)
-    elif level_for_exp is not None:
-        calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp)
 
 ### main script starts here
 
