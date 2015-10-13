@@ -4,7 +4,7 @@ By Donald Burr <dburr@DonaldBurr.com>
 
 ## What is this?
 
-This is a set of Python scripts to help players who play the mobile rhythm game [Love Live School Idol Festival](http://www.school-fes.klabgames.net).
+This is a set of Python scripts **(and now a Web app too!)** to help players who play the mobile rhythm game [Love Live School Idol Festival](http://www.school-fes.klabgames.net).
 Love Live School Idol Festival (SIF) is a free-to-play (with in-app purchases) rhythm and card collection game available for iOS and Android
 and is based on the [Love Live!](http://www.lovelive-anime.jp/worldwide/) media franchise.
 
@@ -19,6 +19,8 @@ Because I suck at math. (OK, not really. I just hate it. With a burning passion.
 You will need the [Python](https://www.python.org) scripting language installed on your machine. If you are on a Mac or a Linux machine, you almost certainly already have this. To check, run the command `python -V` at a shell prompt. If you get back something like `Python 2.7.10` then you do. If instead you see `command not found` then you will need to install Python. For Linux users, it is probably available in your distribution's package manager; for RedHat based systems (RedHat, CentOS, Fedora) try `sudo yum install python` and for Debian based distros (Debian, Ubuntu, Mint) try `sudo apt-get install python`. Mac users can install Python using [Homebrew](http://brew.sh); once Homebrew is installed, issue the command `brew install python` If you are on a Windows computer, you can download [Python for Windows](https://www.python.org/downloads/windows/) from the Python website.
 
 ## The Scripts
+
+All scripts are located in the [command_line](command_line) directory.
 
 ### Event Time-Remaining Calculator
 
@@ -178,6 +180,12 @@ Today is 10/12/2015 and you currently have 18 love gems.
 01/16/2016: free gem as login bonus, which brings you to 50 gems.
 You will have 50 love gems on 01/16/2016. Good things come to those who wait!
 ```
+
+## The Web App
+
+You asked for a web app, and here it is! The [web_app](web_app) directory contains a (mostly) fully featured web app version of SIF Tools. The best part is, you don't need a web server to run it. You should just be able to open the [sif_tools.html](web_app/sif_tools.html) file in your local web browser and run it right on your own computer. You will need to have JavaScript enabled in your browser however. (Of course you can host these files on a web server just like any other website, if you happen to have access to a web server.)
+
+**Right now the only part of the web app that works is the Rank Calculator. I am working on finishing the rest of the calculators (Love Gem, Card Level-up and Event End.) Stay tuned!**
 
 ## Bugs? Need help? Got any suggestions/ideas for new features? Or want to chat?
 

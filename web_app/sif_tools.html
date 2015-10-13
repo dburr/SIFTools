@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SIFTools</title>
+  <link href="css/external/jquery-ui.css" rel="stylesheet">
+  <link href="css/sif-tools.css" rel="stylesheet">
+  <script src="js/external/jquery.js"></script>
+  <script src="js/external/jquery-ui.js"></script>
+  <script src="js/external/moment.js"></script>
+  <script src="js/sif-tools.js"></script>
+</head>
+<body>
+
+  <div id="header" align="center">
+    <h1>SIF Tools</h1>
+  </div>
+
+  <div id="tabs">
+    <ul>
+      <li><a href="#tab-rank">Rank Calc</a></li>
+      <li><a href="#tab-love-gem">Love Gem Calc</a></li>
+      <li><a href="#tab-card-level">Card Level-up Calc</a></li>
+      <li><a href="#tab-event">Event End Calc</a></li>
+    </ul>
+
+    <div id="tab-rank">
+      <div id="the-form" align="center">
+        <h1>Rank Calculator</h1>
+        Current Rank:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="current_rank" name="current_rank" placeholder="rank" value="" />
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="current_exp" name="current_exp" placeholder="" value="0" />
+        Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
+        Game Version:&nbsp;&nbsp;&nbsp;
+        <select id="game_version" name="game_version">
+          <option value="EN">EN</option>
+          <option value="JP">JP</option>
+        </select>
+        <br /><br />
+        <div id="button-calculate-rank">Calculate</div>
+        <br /><br />
+        <div id="rank-calc-result-area">
+          <h1>Results</h1>
+          EXP required:&nbsp;&nbsp;&nbsp;<span id="rank-result-exp">-</span><br /><br />
+          To get this level of EXP will require playing the following number of songs:<br /><br />
+          EASY:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-easy">-</span><br />
+          NORMAL:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-normal">-</span><br />
+          HARD:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-hard">-</span><br />
+          EXPERT:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-expert">-</span><br /><br/>
+          At this rank you will have <span id="rank-results-lp">-</span> LP and <span id="rank-results-fp">-</span> friend slots.<br /><br />
+          <div id="button-reset-rank">Reset</div>
+        </div>
+      </div>
+    </div>
+    <div id="tab-love-gem">
+      <div id="love-gem-form" align="center">
+        Current Love Gems:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="current_gems" name="current_gems" placeholder="" value="0" />
+        <br /><br />
+        Mode:<br />
+        <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />How many gems will you have on a given date?<br />
+        <input type="radio" name="gem-mode" id="gem-mode" value="GEMS" />When will I have this many gems?<br /><br />
+        <div id="gem-date-area">
+        Date:&nbsp;&nbsp;&nbsp;<input type="text" size="10" id="gem_desired_date" name="gem_desired_date" placeholder="MM/DD/YYYY" value="" />
+        </div>
+        <div id="gem-desired-gems-area">
+        Number of gems desired:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="gem_desired_gems" name="gem_desired_gems" placeholder="gems" value="" />
+        </div>
+        <br /><br />
+          <input type="checkbox" name="gems_verbose" id="gems_verbose" value="YES" />Verbose Mode<br />
+        <br /><br />
+        <div id="button-calculate-gems">Calculate</div>
+        <br /><br />
+        <div id="gem-calc-result-area">
+          <h1>Results</h1>
+          <span id="gem-result-summary">-</span><br /><br />
+          <div id="gem-result-textarea">
+          <textarea id="gem-result-verbose-area" rows="10" cols="80"></textarea><br /><br />
+          </div>
+          <div id="button-reset-gems">Reset</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-card-level">
+      <select id="recipes-list">
+      </select>
+      
+      <span id="button-create">
+        Create
+      </span>
+
+      <span id="button-edit">
+        Edit
+      </span>
+
+      <span id="button-delete">
+        Delete
+      </span>
+    </div>
+
+    <div id="tab-event">
+      <table id="recipe-table" border='0'>
+        <tr>
+          <th class="remove-box">&nbsp;</th>
+          <th class="ingredient">Flavor</th>
+          <th class="slider">&nbsp;</th>
+          <th class="input-box">&nbsp;</th>
+        </tr>
+      </table>
+      <div id="button-add-flavor">+</div>
+    </div>
+
+    <div id="error-dialog" title="Error">
+      <p><span id="error-text" /></p>
+    </div>
+  </div>
+
+</body>
+</html>
