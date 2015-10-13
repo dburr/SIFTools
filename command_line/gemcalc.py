@@ -31,7 +31,7 @@ import calendar
 import datetime
 from datetime import timedelta
 
-def is_muse_members_birthday(month, day):
+def muse_birthday_member(month, day):
     bdays = {
         (1,17): "Hanayo",
         (3,15): "Umi",
@@ -43,9 +43,9 @@ def is_muse_members_birthday(month, day):
         (10,21):"Eli",
         (11,1): "Rin" }
     if (month, day) in bdays:
-        return (True, bdays[month,day])
+        return bdays[month,day]
     else:
-        return (False, None)
+        return None
 
 def is_gem_day(day):
     # according the login bonus chart, gems are given out on days numbered 1,6,11,16,21,26,30
@@ -57,19 +57,19 @@ def calc_gems(gems, target_date, desired_gems, verbose=False):
     print "(Assuming you collected any gems you got today and already counted those.)"
     while ((desired_gems is None or gems < desired_gems)
             and (target_date is None or now < target_date)):
-        now = now + timedelta(days=1)
+        now += timedelta(days=1)
         if is_gem_day(now.day):
-            gems = gems + 1
-        (is_bday, name) = is_muse_members_birthday(now.month, now.day)
-        if is_bday:
-            gems = gems + 5
+            gems += 1
+        bday = muse_birthday_member(now.month, now.day)
+        if bday is not None:
+            gems += 5
         if verbose:
-            if is_gem_day(now.day) and is_bday:
-                print "%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
+            if is_gem_day(now.day) and bday is not None:
+                print "%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems." % (now.month, now.day, now.year, bday, gems)
             elif is_gem_day(now.day):
                 print "%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems." % (now.month, now.day, now.year, gems)
-            elif is_bday:
-                print "%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, name, gems)
+            elif bday is not None:
+                print "%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems." % (now.month, now.day, now.year, bday, gems)
     print "You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!" % (gems, now.month, now.day, now.year)
 
 def usage():
