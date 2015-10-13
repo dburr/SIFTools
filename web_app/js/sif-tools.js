@@ -50,6 +50,9 @@ function setup_ui_elements()
 		}
 	});
 
+    // set up datepicker
+    $( "#gem_desired_date" ).datepicker();
+    
 	// set up buttons
 	["calculate-rank", "reset-rank", "calculate-gems", "reset-gems"].forEach(function(entry) {
 		var selector = "#button-" + entry;
@@ -206,10 +209,83 @@ function handle_gem_mode_select()
     }
 }
 
+function is_muse_members_birthday(moment)
+{
+    var the_month = month(moment);
+    var the_day = day(moment);
+
+    var is_bday = false;
+    var bday_name = "";
+    if (the_month == 1 && the_day == 17) {
+        is_bday = true;
+        bday_name = "Hanayo";
+    } else if (the_month == 3 && the_day == 15) {
+        is_bday = true;
+        bday_name = "Umi";
+    } else if (the_month == 4 && the_day == 19) {
+        is_bday = true;
+        bday_name = "Maki";
+    } else if (the_month == 6 && the_day == 9) {
+        is_bday = true;
+        bday_name = "Nozomi";
+    } else if (the_month == 7 && the_day == 22) {
+        is_bday = true;
+        bday_name = "Nico";
+    } else if (the_month == 8 && the_day == 3) {
+        is_bday = true;
+        bday_name = "Honoka";
+    } else if (the_month == 9 && the_day == 12) {
+        is_bday = true;
+        bday_name = "Kotori";
+    } else if (the_month == 10 && the_day == 21) {
+        is_bday = true;
+        bday_name = "Eli";
+    } else if (the_month == 11 && the_day == 1) {
+        is_bday = true;
+        bday_name = "Rin";
+    }
+    return [is_bday, bday_name];
+}
+
+function is_gem_day(moment)
+{
+    var the_day = day(moment);
+    // according the login bonus chart, gems are given out on days numbered 1,6,11,16,21,26,30
+    if (the_day == 1 || the_day == 6 || the_day == 11 || the_day == 16 || the_day == 21 || the_day == 26 || the_day == 30) {
+        return true;
+    }
+    return false;
+}
+
+// moment.js starts months/days/years at 0... weird...
+function month(moment)
+{
+    return moment.month() + 1;
+}
+
+// moment.js uses date() not day()
+function day(moment)
+{
+    return moment.date();
+}
+
+function year(moment)
+{
+    return moment.year();
+}
+
+function is_same_day(m1, m2)
+{
+    if (month(m1) == month(m2) && day(m1) == day(m2) && year(m1) == year(m2)) {
+        return true;
+    }
+    return false;
+}
+
 function calculate_gems()
 {
     var verbose = $("#gems_verbose").is(':checked');
-    var current_gems = $("#current_gems").val();
+    var current_gems = parseInt($("#current_gems").val());
     if (isNaN(current_gems)) {
         alert("Error: invalid number of current gems. Please check your input and try again.");
         return;
@@ -217,13 +293,59 @@ function calculate_gems()
     var mode = $("input[name=gem-mode]:checked").val();
     if (mode === "DATE")  {
         var target_date = $("#gem_desired_date").val();
+        var target_date_object = moment(new Date(target_date));
+
+        var now = moment(new Date());
+        if (target_date_object.isBefore(now) || is_same_day(now, target_date_object)) {
+            window.alert("Error: the date must be in the future.");
+            return;
+        }
+        
+        // ready to rock
+        var resultsString = sprintf("Today is %02d/%02d/%04d and you currently have %d love gems.<br />(Assuming you collected any gems you got today and already counted those.)", month(now), day(now), year(now), current_gems);
+        var verboseText = "";
+        var gems = current_gems
+        now = now.add(1, 'days')
+        while (now.isBefore(target_date_object) || is_same_day(now, target_date_object)) {
+            // is it a login bonus?
+            if (is_gem_day(now)) {
+                gems += 1;
+            }
+            
+            // is it a birthday?
+            var birthday_tuple = is_muse_members_birthday(now);
+            var is_bday = birthday_tuple[0];
+            var name = birthday_tuple[1];
+            if (is_bday) {
+                gems += 5;
+            }
+            
+            // record verbose output if desired
+            if (verbose) {
+                if (is_gem_day(now) && is_bday) {
+                    verboseText += sprintf("%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                }
+                
+                if (is_bday && !is_gem_day(now)) {
+                    verboseText += sprintf("%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                }
+                
+                if (is_gem_day(now) && !is_bday) {
+                    verboseText = verboseText + sprintf("%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems.\n", month(now), day(now), year(now), gems);
+                }
+            }
+
+            now = now.add(1, 'days')
+        }
+
+        resultsString = resultsString + sprintf("<br />You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!", gems, month(target_date_object), day(target_date_object), year(target_date_object));
+        $("#gem-result-summary").html(resultsString);
         if (verbose) {
-            $("#gem-result-summary").text("Insert verbose results here");
-            $("#gem-result-verbose-area").val("VERBOSITY IS GOOD!");
+            $("#gem-result-verbose-area").val(verboseText);
             $("#gem-result-textarea").show();
         } else {
             $("#gem-result-summary").text("Insert non-verbose results here");
-            $("#gem-result-verbose-area").val("VERBOSITY IS BAD!");
+            $("#gem-result-verbose-area").val(verboseText);
             $("#gem-result-textarea").hide();
         }
     } else if (mode === "GEMS")  {
