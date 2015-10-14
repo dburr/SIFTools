@@ -1,11 +1,24 @@
-// LDM main script of doom
-// Donald Burr, VCT Labs
-
-// Message pane: http://stackoverflow.com/questions/5267569/display-messages-with-jquery-ui
-
-// up arrow = &#8593; &#x2191;
-// down arrow = &#8595; &#x2193;
-// bar = &#8213; &#x2015;
+// SIFTools <https://github.com/dburr/SIFTools/>
+// By Donald Burr <dburr@DonaldBurr.com>
+// Copyright (c) 2015 Donald Burr.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 // Set to 0 to disable debugging, 1+ to enable debugging (higher = more verbose)
 var DEBUG_LEVEL = 0;
@@ -38,11 +51,7 @@ $(document).ready(function(){
 function setup_ui_elements()
 {
 	LOG(1, "setup_ui_elements()");
-	// set title
-	// document.title = "LDM Demo @ " + window.location.hostname;
-	// $( "#header" ).html("<h1>LDM Demo @ " + window.location.hostname + "</h1>");
 
-	// set up tabs
 	$( "#tabs" ).tabs({
 		active: 0,
 		create: function(event, ui) {
@@ -57,7 +66,7 @@ function setup_ui_elements()
 		}
 	});
 
-    // set up datepicker
+    // set up date/time pickers
     $( "#gem_desired_date" ).datepicker();
     $( "#event_end_date" ).datepicker();
     $( "#event_end_time" ).timepicker();
@@ -131,9 +140,6 @@ function set_up_tab(tab)
 function rank_calc_tab_selected()
 {
     LOG(1, "rank_calc_tab_selected");
-    // make sure scan field has focus
-    // var doh = document.getElementById("barcode-scan-area");
-    // doh.focus();
 }
 
 function love_gem_calc_tab_selected()
