@@ -31,6 +31,7 @@ $(document).ready(function(){
 	// set up button handlers
 	setup_button_handlers();
 	// set up slider handlers
+    window.timerInterval = 0;
 });
 
 // Set up UI elements (tabs, buttons, etc.)
@@ -58,9 +59,11 @@ function setup_ui_elements()
 
     // set up datepicker
     $( "#gem_desired_date" ).datepicker();
+    $( "#event_end_date" ).datepicker();
+    $( "#event_end_time" ).timepicker();
     
 	// set up buttons
-	["calculate-rank", "reset-rank", "calculate-gems", "reset-gems", "calculate-card", "reset-card"].forEach(function(entry) {
+	["calculate-rank", "reset-rank", "calculate-gems", "reset-gems", "calculate-card", "reset-card", "start-stop-timer", "clear-timer"].forEach(function(entry) {
 		var selector = "#button-" + entry;
 		LOG(1, "setting up " + selector);
 		$(selector).button();
@@ -104,6 +107,12 @@ function setup_button_handlers()
     });
     $("#button-reset-card").click(function(evt) {
         reset_card();
+    });
+    $("#button-start-stop-timer").click(function(evt) {
+        start_stop_timer();
+    });
+    $("#button-clear-timer").click(function(evt) {
+        clear_timer();
     });
 }
 
@@ -297,6 +306,21 @@ function day(moment)
 function year(moment)
 {
     return moment.year();
+}
+
+function hour(moment)
+{
+    return moment.hour();
+}
+
+function minute(moment)
+{
+    return moment.minute();
+}
+
+function second(moment)
+{
+    return moment.second();
 }
 
 function is_same_day(m1, m2)
@@ -588,11 +612,51 @@ function reset_card()
     $("#card-level-area").show();
 }
 
+function start_stop_timer()
+{
+    if (window.timerInterval != 0) {
+        // stop it
+        clearInterval(window.timerInterval);
+        window.timerInterval = 0;
+        $("#button-start-stop-timer span").text("Start Timer");
+    } else {
+        // 2013-02-08 09:30         # An hour and minute time part
+        var dateString = $("#event_end_date").val() + " " + $("#event_end_time").val() + "Z";
+        window.the_end = moment(dateString, "MM/DD/YYYY HH:mmZ");
+        window.timerInterval = setInterval(run_timer, 1000);
+        $("#button-start-stop-timer span").text("Stop Timer");
+    }
+}
 
+function run_timer()
+{
+    var now = moment(new Date());
+    var end = window.the_end;
+    var string = "<h1><b>CURRENT TIME</b></h1><h2>" + now.utc().format("MM/DD/YYYY HH:mm:ss") + " UTC</h2><h1>EVENT ENDS:</h1><h2>" + end.utc().format("MM/DD/YYYY HH:mm:ss") + " UTC</h2>";
+    if (now.isBefore(end))  {
+        var ms = end.diff(now.utc());
+        var t = moment.duration(ms).asMilliseconds();
+        var seconds = Math.floor( (t/1000) % 60 );
+        var minutes = Math.floor( (t/1000/60) % 60 );
+        var hours = Math.floor( (t/(1000*60*60)) % 24 );
+        var days = Math.floor( t/(1000*60*60*24) );
+        var total_hours = (days * 24) + hours;
+        
+        var time_till = sprintf("<h2>%d hours total<br />%d days %d hours %d minutes %d seconds</h2>", total_hours, days, hours, minutes, seconds);
+        // d.asDays() + " days " + d.asHours() + moment.utc(ms).format(":mm:ss");
 
+        // var time_till = moment.utc(end.diff(now)).format("HH:mm:ss");//.format("HH:mm:ss");
+        string += "<h1>TIME REMAINING:</h1><h2>" + time_till + "</H2>";
+    } else {
+        string += "<h1>EVENT IS OVER</h1>";
+    }
+    $("#timer_output_area").html(string);
+}
 
-
-
+function clear_timer()
+{
+    $("#timer_output_area").html("<h1>Timer Not Running</h1>");
+}
 
 
 

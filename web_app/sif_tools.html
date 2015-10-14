@@ -4,9 +4,12 @@
   <meta charset="utf-8">
   <title>SIFTools</title>
   <link href="css/external/jquery-ui.css" rel="stylesheet">
+  <link href="css/external/jquery-ui-timepicker-addon.css" rel="stylesheet">
   <link href="css/sif-tools.css" rel="stylesheet">
   <script src="js/external/jquery.js"></script>
   <script src="js/external/jquery-ui.js"></script>
+  <script src="js/external/jquery-ui-timepicker-addon.js"></script>
+  <script src="js/external/jquery-ui-sliderAccess.js"></script>
   <script src="js/external/moment.js"></script>
   <script src="js/external/sprintf.js"></script>
   <script src="js/sif_tools.js"></script>
@@ -114,13 +117,21 @@
     </div>
 
     <div id="tab-event">
-      <div id="love-gem-form" align="center">
-        <H1>Coming Soon...</H1>
+      <div id="event-timer-form" align="center">
+      <h3>Enter Event End Date/Time (in UTC):</h3><br />
+      <input type="text" size="10" id="event_end_date" name="event_end_date" placeholder="MM/DD/YYYY" value="" />
+      <input type="text" size="5" id="event_end_time" name="event_end_time" placeholder="HH:MM" value="" />
+      <br /><br />
+      <div id="button-start-stop-timer">Start Timer</div>
+      <div id="timer_output_area" align="center">
+        <h1>Timer Not Running</h1>
       </div>
+      <div id="button-clear-timer">Clear Timer</div>
     </div>
 
     <div id="error-dialog" title="Error">
       <p><span id="error-text" /></p>
+      </div>
     </div>
   </div>
 
