@@ -648,7 +648,19 @@ function run_timer()
         var days = Math.floor( t/(1000*60*60*24) );
         var total_hours = (days * 24) + hours;
         
-        var time_till = sprintf("<h2>%d hours total<br />%d days %d hours %d minutes %d seconds</h2>", total_hours, days, hours, minutes, seconds);
+        var time_till = "<h2>";
+        
+        if (total_hours >= 24) {
+            time_till += sprintf("%d hours<br />", total_hours);
+        }
+        time_till += "(";
+        if (days >= 1) {
+            time_till += sprintf("%d day%s ", days, (days > 1 ? "s" : ""));
+        }
+        if (hours >= 1) {
+            time_till += sprintf("%d hour%s ", hours, (hours > 1 ? "s" : ""));
+        }
+        time_till += sprintf("%d minute%s %d second%s)</h2>", minutes, (minutes > 1? "s" : ""), seconds, (seconds > 1 ? "s" : ""));
         // d.asDays() + " days " + d.asHours() + moment.utc(ms).format(":mm:ss");
 
         // var time_till = moment.utc(end.diff(now)).format("HH:mm:ss");//.format("HH:mm:ss");
