@@ -675,8 +675,7 @@ function run_timer()
     }
     $("#timer_output_area").html(string);
     
-    // dumb ass way to fetch sifen tweets at 36 minutes past the hour
-    // actually using 40 minutes mark to allow for some slop
+    // dumb ass way to fetch and display @sifen_trackbot tier cutoff tweets hourly
     // using this twitter fetcher: http://jasonmayes.com/projects/twitterApi/#sthash.budgYosd.dpbs
     var config5 = {
       "id": '654587648904794112',
@@ -707,7 +706,8 @@ function run_timer()
         }
     }
 
-    if (minute(now) == 40 || window.immediately_refresh_tier_cutoffs)  {
+    // @sifen_trackbot updates come out at 36 minutes past the hour, fetch them at 37 minutes to allow for some slop
+    if (minute(now) == 37 || window.immediately_refresh_tier_cutoffs)  {
         twitterFetcher.fetch(config5);
         window.immediately_refresh_tier_cutoffs = false;
     }
