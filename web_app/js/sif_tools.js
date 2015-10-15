@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+// <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/sifen_trackbot" data-widget-id="654587648904794112">Tweets by @sifen_trackbot</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
 // Set to 0 to disable debugging, 1+ to enable debugging (higher = more verbose)
 var DEBUG_LEVEL = 0;
 
@@ -631,6 +633,9 @@ function start_stop_timer()
         window.the_end = moment(dateString, "MM/DD/YYYY HH:mmZ");
         window.timerInterval = setInterval(run_timer, 1000);
         $("#button-start-stop-timer span").text("Stop Timer");
+        // run the first update ourselves, so that it doesn't stay blank until the timer kicks in
+        window.immediately_refresh_tier_cutoffs = true;
+        run_timer();
     }
 }
 
@@ -669,6 +674,43 @@ function run_timer()
         string += "<h1>EVENT IS OVER</h1>";
     }
     $("#timer_output_area").html(string);
+    
+    // dumb ass way to fetch sifen tweets at 36 minutes past the hour
+    // actually using 40 minutes mark to allow for some slop
+    // using this twitter fetcher: http://jasonmayes.com/projects/twitterApi/#sthash.budgYosd.dpbs
+    var config5 = {
+      "id": '654587648904794112',
+      "domId": '',
+      "maxTweets": 1,
+      "enableLinks": false,
+      "showUser": true,
+      "showTime": true,
+      "dateFunction": '',
+      "showRetweet": false,
+      "customCallback": handleTweets,
+      "showInteraction": false
+    };
+
+    function handleTweets(tweets) {
+        if (tweets.length > 0) {
+            var tweet = tweets[0];
+            // parse it
+            console.log("GOT TWEET: " + tweet);
+            // this is kinda crappy
+            var splitTweet = tweet.split("\n");
+            // this is VERY LAZY
+            // we always assume Tier1 is on line 11, Tier2 is line 12 and Date is 13
+            var tier1 = splitTweet[11];
+            var tier2 = splitTweet[12];
+            var updateTime = splitTweet[13];
+            $("#tier_info_output_area").html("<h2>Latest Tier Cutoffs as of " + updateTime + ":<br />" + tier1 + "<br />" + tier2 + "</h2>");
+        }
+    }
+
+    if (minute(now) == 40 || window.immediately_refresh_tier_cutoffs)  {
+        twitterFetcher.fetch(config5);
+        window.immediately_refresh_tier_cutoffs = false;
+    }
 }
 
 function clear_timer()
