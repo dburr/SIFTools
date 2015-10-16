@@ -708,6 +708,7 @@ function run_timer()
 
     // @sifen_trackbot updates come out at 36 minutes past the hour, fetch them at 37 minutes to allow for some slop
     if (minute(now) == 37 || window.immediately_refresh_tier_cutoffs)  {
+        $("#tier_info_output_area").html("<h2>Updating tier cutoff data, please wait...</h2>");
         twitterFetcher.fetch(config5);
         window.immediately_refresh_tier_cutoffs = false;
     }
