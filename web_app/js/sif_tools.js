@@ -726,15 +726,19 @@ function run_timer()
         if (tweets.length > 0) {
             var tweet = tweets[0];
             // parse it
-            console.log("GOT TWEET: " + tweet);
-            // this is kinda crappy
+            LOG(1, "GOT TWEET: " + tweet);
+            // !!! QUICK & DIRTY HACK ALERT !!!
+            // this is kinda crappy, @sifen_trackbot tweets come out as multiple lines separated by newlines
+            // so for now we just split the incoming tweet into an array of strings (one per line) and pull the values out using explicit line numbers
+            // we always assume Tier1 value is on line 11, Tier2 is line 12 and Date/time/% complete is line 13
+            // this may (in fact it probably will) change in the future
+            // eventually I would like to come up with a better (i.e. less crappy) algorithm to parse the string and extract the values dynamically
+            // but for now this will do :P
             var splitTweet = tweet.split("\n");
-            // this is VERY LAZY
-            // we always assume Tier1 is on line 11, Tier2 is line 12 and Date is 13
             var tier1 = splitTweet[11];
             var tier2 = splitTweet[12];
             var updateTime = splitTweet[13];
-            $("#tier_info_output_area").html("<h2>Latest Tier Cutoffs as of " + updateTime + ":<br />" + tier1 + "<br />" + tier2 + "</h2>");
+            $("#tier_info_output_area").html("<h2>Latest Tier Cutoffs as of UTC " + updateTime + ":<br />" + tier1 + "<br />" + tier2 + "</h2>");
         }
     }
 
