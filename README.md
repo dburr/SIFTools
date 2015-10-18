@@ -185,6 +185,18 @@ You will have 50 love gems on 01/16/2016. Good things come to those who wait!
 
 You asked for a web app, and here it is! The [web_app](web_app) directory contains a (mostly) fully featured web app version of SIF Tools. The best part is, you don't need a web server to run it. You should just be able to open the [sif_tools.html](web_app/sif_tools.html) file in your local web browser and run it right on your own computer. You will need to have JavaScript enabled in your browser however. (Of course you can host these files on a web server just like any other website, if you happen to have access to a web server.)
 
+## Credits
+
+The web app uses the following third-party Javascript libraries:
+
+* [jQuery](https://jquery.com) ([License](https://jquery.org/license/))
+* [jQuery UI](https://jqueryui.com) ([License](https://github.com/jquery/jquery-ui/blob/master/LICENSE.txt))
+* [jQuery Keypad](http://keith-wood.name/keypad.html) ([License](http://keith-wood.name/licence.html))
+* [Moment.js](http://momentjs.com) ([License](https://github.com/moment/moment/blob/develop/LICENSE))
+* [jquery.timepicker](http://jonthornton.github.io/jquery-timepicker/) ([License](https://opensource.org/licenses/MIT))
+* [node-sprintf](https://github.com/maritz/node-sprintf) ([License](https://github.com/maritz/node-sprintf#copyrightlicense))
+* [twitterFetcher](https://github.com/jasonmayes/Twitter-Post-Fetcher) ([License](https://github.com/jasonmayes/Twitter-Post-Fetcher/blob/master/License.txt))
+
 ## Bugs? Need help? Got any suggestions/ideas for new features? Or want to chat?
 
 I wouldn't be surprised if there are any bugs, and/or if I got some of the calculations wrong. If you have any bug reports (or better yet, bug fixes!), suggestions/ideas for new features, or if you need help using these (or if you just want to say hi and/or chat) please feel free to send them my way. Create a pull request on Github or just drop me an email.
