@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=320, initial-scale=1">
   <meta charset="utf-8">
   <title>SIFTools</title>
   <link href="css/external/jquery-ui.css" rel="stylesheet">
@@ -32,9 +33,9 @@
     <div id="tab-rank">
       <div id="the-form" align="center">
         <h1>Rank Calculator</h1>
-        Current Rank:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="current_rank" name="current_rank" placeholder="rank" value="" />
-        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="current_exp" name="current_exp" placeholder="" value="0" />
-        Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
+        Current Rank:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_rank" name="current_rank" placeholder="rank" value="" />
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_exp" name="current_exp" placeholder="" value="0" />
+        Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
         Game Version:&nbsp;&nbsp;&nbsp;
         <select id="game_version" name="game_version">
           <option value="EN">EN</option>
@@ -58,7 +59,7 @@
     </div>
     <div id="tab-love-gem">
       <div id="love-gem-form" align="center">
-        Current Love Gems:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="current_gems" name="current_gems" placeholder="" value="0" />
+        Current Love Gems:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_gems" name="current_gems" placeholder="" value="0" />
         <br /><br />
         Mode:<br />
         <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />How many gems will you have on a given date?<br />
@@ -67,7 +68,7 @@
         Date:&nbsp;&nbsp;&nbsp;<input type="text" size="10" id="gem_desired_date" name="gem_desired_date" placeholder="MM/DD/YYYY" value="" />
         </div>
         <div id="gem-desired-gems-area">
-        Number of gems desired:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="gem_desired_gems" name="gem_desired_gems" placeholder="gems" value="" />
+        Number of gems desired:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="gem_desired_gems" name="gem_desired_gems" placeholder="gems" value="" />
         </div>
         <br /><br />
           <input type="checkbox" name="gems_verbose" id="gems_verbose" value="YES" />Verbose Mode<br />
@@ -94,17 +95,17 @@
           <option value="SR">SR</option>
           <option value="UR">UR</option>
         </select>
-        Current Level:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_current_level" name="card_current_level" placeholder="level" value="" />
-        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_current_exp" name="card_current_exp" placeholder="" value="0" />
+        Current Level:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_current_level" name="card_current_level" placeholder="level" value="" />
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_current_exp" name="card_current_exp" placeholder="" value="0" />
         <br /><br />
         Mode:<br />
         <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />Amount of XP needed to get to a level<br />
         <input type="radio" name="card-mode" id="card-mode" value="EXP" />Final level after feeding an amount of EXP<br /><br />
         <div id="card-level-area">
-        Desired level:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
+        Desired level:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
         </div>
         <div id="card-exp-area">
-        EXP:&nbsp;&nbsp;&nbsp;<input type="text" size="5" id="card_feed_exp" name="card_feed_exp" placeholder="exp" value="" />
+        EXP:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_feed_exp" name="card_feed_exp" placeholder="exp" value="" />
         </div>
         <br /><br />
         <div id="button-calculate-card">Calculate</div>
