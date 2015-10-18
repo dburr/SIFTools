@@ -163,7 +163,11 @@ function calculate_rank()
 {
     // validate data
     var current_rank = parseInt($("#current_rank").val());
-    var current_exp = parseInt($("#current_exp").val());
+    var current_exp_input = $("#current_exp").val();
+    var current_exp = 0;
+    if (current_exp_input != "") {
+        current_exp = parseInt(current_exp_input);
+    }
     var desired_rank = parseInt($("#desired_rank").val());
     var game_version = $("#game_version").val();
     if (isNaN(current_rank) || isNaN(current_exp) || isNaN(desired_rank)) {
@@ -521,7 +525,11 @@ function is_valid_exp(rarity, level, exp)
 function calculate_card()
 {
     var current_level = parseInt($("#card_current_level").val());
-    var current_exp = parseInt($("#card_current_exp").val());
+    var current_exp_input = $("#card_current_exp").val();
+    var current_exp = 0;
+    if (current_exp_input != "") {
+        current_exp = parseInt(current_exp_input);
+    }
     var rarity = $("#card_rarity").val();
     
     if (isNaN(current_level) || !is_valid_level(rarity, current_level)) {
@@ -611,8 +619,8 @@ function reset_card()
     $("#card-result-summary").text("-");
     $("#card-level-area").hide();
     $("#card-exp-area").hide();
-    $("#card_current_level").val(0);
-    $("#card_current_exp").val(0);
+    $("#card_current_level").val("");
+    $("#card_current_exp").val("");
     var $radios = $('input:radio[name=card-mode]');
     $radios.filter('[value=LEVEL]').prop('checked', true);
     $("#card_desired_level").val("");

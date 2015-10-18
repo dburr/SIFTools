@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=320, initial-scale=1">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="viewport" content="width=320, initial-scale=1, user-scalable=no">
   <meta charset="utf-8">
   <title>SIFTools</title>
   <link href="css/external/jquery-ui.css" rel="stylesheet">
@@ -34,8 +35,11 @@
       <div id="the-form" align="center">
         <h1>Rank Calculator</h1>
         Current Rank:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_rank" name="current_rank" placeholder="rank" value="" />
-        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_exp" name="current_exp" placeholder="" value="0" />
-        Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
+        <br />
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_exp" name="current_exp" placeholder="exp" value="" />
+        <br />
+        Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
+        <br />
         Game Version:&nbsp;&nbsp;&nbsp;
         <select id="game_version" name="game_version">
           <option value="EN">EN</option>
@@ -47,7 +51,7 @@
         <div id="rank-calc-result-area">
           <h1>Results</h1>
           EXP required:&nbsp;&nbsp;&nbsp;<span id="rank-result-exp">-</span><br /><br />
-          To get this level of EXP will require playing the following number of songs:<br /><br />
+          You will need to play the following number of songs in order to get this amount of EXP:<br /><br />
           EASY:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-easy">-</span><br />
           NORMAL:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-normal">-</span><br />
           HARD:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-hard">-</span><br />
@@ -59,11 +63,11 @@
     </div>
     <div id="tab-love-gem">
       <div id="love-gem-form" align="center">
-        Current Love Gems:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_gems" name="current_gems" placeholder="" value="0" />
+        Current Love Gems:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="current_gems" name="current_gems" placeholder="gems" value="" />
         <br /><br />
         Mode:<br />
-        <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />How many gems will you have on a given date?<br />
-        <input type="radio" name="gem-mode" id="gem-mode" value="GEMS" />When will I have this many gems?<br /><br />
+        <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />Number of gems on date?<br />
+        <input type="radio" name="gem-mode" id="gem-mode" value="GEMS" />Date you will have this many gems?<br /><br />
         <div id="gem-date-area">
         Date:&nbsp;&nbsp;&nbsp;<input type="text" size="10" id="gem_desired_date" name="gem_desired_date" placeholder="MM/DD/YYYY" value="" />
         </div>
@@ -95,12 +99,14 @@
           <option value="SR">SR</option>
           <option value="UR">UR</option>
         </select>
+        <br />
         Current Level:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_current_level" name="card_current_level" placeholder="level" value="" />
-        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_current_exp" name="card_current_exp" placeholder="" value="0" />
+        <br />
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_current_exp" name="card_current_exp" placeholder="exp" value="" />
         <br /><br />
         Mode:<br />
-        <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />Amount of XP needed to get to a level<br />
-        <input type="radio" name="card-mode" id="card-mode" value="EXP" />Final level after feeding an amount of EXP<br /><br />
+        <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />EXP needed to get to a level?<br />
+        <input type="radio" name="card-mode" id="card-mode" value="EXP" />Level reached after feeding EXP?<br /><br />
         <div id="card-level-area">
         Desired level:&nbsp;&nbsp;&nbsp;<input type="text" pattern="\d*" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
         </div>
