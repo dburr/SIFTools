@@ -749,19 +749,5 @@ function run_timer()
 function clear_timer()
 {
     $("#timer_output_area").html("<h1>Timer Not Running</h1>");
+    $("#tier_info_output_area").html("");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
