@@ -21,3 +21,7 @@ strong {
 table {
   table-layout: fixed;
 }
+
+input[type=number]{
+    width: 80px;
+}
