@@ -68,6 +68,17 @@ function setup_ui_elements()
 		}
 	});
 
+    // set up keypads
+    $( "#current_rank" ).keypad(); // {prompt: 'Enter here'}
+    $( "#current_exp" ).keypad(); // {prompt: 'Enter here'}
+    $( "#desired_rank" ).keypad(); // {prompt: 'Enter here'}
+    $( "#current_gems" ).keypad(); // {prompt: 'Enter here'}
+    $( "#gem_desired_gems" ).keypad(); // {prompt: 'Enter here'}
+    $( "#card_current_level" ).keypad(); // {prompt: 'Enter here'}
+    $( "#card_current_exp" ).keypad(); // {prompt: 'Enter here'}
+    $( "#card_desired_level" ).keypad(); // {prompt: 'Enter here'}
+    $( "#card_feed_exp" ).keypad(); // {prompt: 'Enter here'}
+    
     // set up date/time pickers
     $( "#gem_desired_date" ).datepicker();
     $( "#event_end_date" ).datepicker();

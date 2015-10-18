@@ -7,8 +7,11 @@
   <title>SIF Tools</title>
   <link href="css/external/jquery-ui.css" rel="stylesheet">
   <link href="css/external/jquery-ui-timepicker-addon.css" rel="stylesheet">
+  <link type="text/css" href="css/external/jquery.keypad.css" rel="stylesheet">
   <link href="css/sif-tools.css" rel="stylesheet">
   <script src="js/external/jquery.js"></script>
+  <script type="text/javascript" src="js/external/jquery.plugin.js"></script> 
+  <script type="text/javascript" src="js/external/jquery.keypad.js"></script>
   <script src="js/external/jquery-ui.js"></script>
   <script src="js/external/jquery-ui-timepicker-addon.js"></script>
   <script src="js/external/jquery-ui-sliderAccess.js"></script>
@@ -34,11 +37,11 @@
         <div id="tab-rank">
             <div id="the-form" align="center">
                 <h1>Rank Calculator</h1>
-                Current Rank:&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="current_rank" name="current_rank" placeholder="rank" value="" />
+                Current Rank:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_rank" name="current_rank" placeholder="rank" value="" />
                 <br />
-                Current EXP (optional):&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="current_exp" name="current_exp" placeholder="exp" value="" />
+                Current EXP (optional):&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_exp" name="current_exp" placeholder="exp" value="" />
                 <br />
-                Desired Rank:&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
+                Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
                 <br />
                 Game Version:&nbsp;&nbsp;&nbsp;
                 <select id="game_version" name="game_version">
@@ -63,7 +66,7 @@
       </div>
       <div id="tab-love-gem">
           <div id="love-gem-form" align="center">
-          Current Love Gems (optional):&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="current_gems" name="current_gems" placeholder="gems" value="" />
+          Current Love Gems (optional):&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_gems" name="current_gems" placeholder="gems" value="" />
             <br /><br />
             Mode:<br />
             <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />Number of gems on date?<br />
@@ -72,7 +75,7 @@
                 Date:&nbsp;&nbsp;&nbsp;<input type="text" size="10" id="gem_desired_date" name="gem_desired_date" readonly="true" placeholder="MM/DD/YYYY" value="" />
             </div>
             <div id="gem-desired-gems-area">
-                Number of gems desired:&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="gem_desired_gems" name="gem_desired_gems" placeholder="gems" value="" />
+                Number of gems desired:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="gem_desired_gems" name="gem_desired_gems" placeholder="gems" value="" />
             </div>
             <br /><br />
             <input type="checkbox" name="gems_verbose" id="gems_verbose" value="YES" />Verbose Mode<br />
@@ -100,18 +103,18 @@
       <option value="UR">UR</option>
   </select>
   <br />
-  Current Level:&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="card_current_level" name="card_current_level" placeholder="level" value="" />
+  Current Level:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_current_level" name="card_current_level" placeholder="level" value="" />
   <br />
-  Current EXP (optional):&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="card_current_exp" name="card_current_exp" placeholder="exp" value="" />
+  Current EXP (optional):&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_current_exp" name="card_current_exp" placeholder="exp" value="" />
   <br /><br />
   Mode:<br />
   <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />EXP needed to get to a level?<br />
   <input type="radio" name="card-mode" id="card-mode" value="EXP" />Level reached after feeding EXP?<br /><br />
   <div id="card-level-area">
-    Desired level:&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
+    Desired level:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
 </div>
 <div id="card-exp-area">
-    EXP:&nbsp;&nbsp;&nbsp;<input type="number" step="1" pattern="\d*" size="5" id="card_feed_exp" name="card_feed_exp" placeholder="exp" value="" />
+    EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_feed_exp" name="card_feed_exp" placeholder="exp" value="" />
 </div>
 <br /><br />
 <div id="button-calculate-card">Calculate</div>
