@@ -82,7 +82,8 @@ function setup_ui_elements()
     // set up date/time pickers
     $( "#gem_desired_date" ).datepicker();
     $( "#event_end_date" ).datepicker();
-    $( "#event_end_time" ).timepicker();
+    // $( "#event_end_time" ).timepicker();
+    $('#event_end_time').timepicker({ 'timeFormat': 'H:i', 'disableTextInput': true });
     
 	// set up buttons
 	["calculate-rank", "reset-rank", "calculate-gems", "reset-gems", "calculate-card", "reset-card", "start-stop-timer", "clear-timer"].forEach(function(entry) {
