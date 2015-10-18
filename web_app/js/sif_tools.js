@@ -346,7 +346,11 @@ function is_same_day(m1, m2)
 function calculate_gems()
 {
     var verbose = $("#gems_verbose").is(':checked');
-    var current_gems = parseInt($("#current_gems").val());
+    var current_gems_text = $("#current_gems").val();
+    var current_gems = 0;
+    if (current_gems_text != "") {
+        current_gems = parseInt(current_gems_text);
+    }
     if (isNaN(current_gems)) {
         alert("Error: invalid number of current gems. Please check your input and try again.");
         return;
@@ -354,7 +358,15 @@ function calculate_gems()
     var mode = $("input[name=gem-mode]:checked").val();
     if (mode === "DATE")  {
         var target_date = $("#gem_desired_date").val();
+        if (target_date === "") {
+            alert("Error: invalid date. Please check and try again.");
+            return;
+        }
         var target_date_object = moment(new Date(target_date));
+        if (!target_date_object.isValid())  {
+            alert("Error: invalid date. Please check and try again.");
+            return;
+        }
 
         var now = moment(new Date());
         if (target_date_object.isBefore(now) || is_same_day(now, target_date_object)) {
@@ -384,15 +396,15 @@ function calculate_gems()
             // record verbose output if desired
             if (verbose) {
                 if (is_gem_day(now) && is_bday) {
-                    verboseText += sprintf("%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
                 }
                 
                 if (is_bday && !is_gem_day(now)) {
-                    verboseText += sprintf("%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />It's %s's birthday! You get 5 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
                 }
                 
                 if (is_gem_day(now) && !is_bday) {
-                    verboseText = verboseText + sprintf("%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems.\n", month(now), day(now), year(now), gems);
+                    verboseText = verboseText + sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), gems);
                 }
             }
 
@@ -402,10 +414,10 @@ function calculate_gems()
         resultsString = resultsString + sprintf("<br />You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!", gems, month(target_date_object), day(target_date_object), year(target_date_object));
         $("#gem-result-summary").html(resultsString);
         if (verbose) {
-            $("#gem-result-verbose-area").val(verboseText);
+            $("#gem-result-verbose-area").html(verboseText);
             $("#gem-result-textarea").show();
         } else {
-            $("#gem-result-verbose-area").val(verboseText);
+            $("#gem-result-verbose-area").html(verboseText);
             $("#gem-result-textarea").hide();
         }
     } else if (mode === "GEMS")  {
@@ -440,15 +452,15 @@ function calculate_gems()
             // record verbose output if desired
             if (verbose) {
                 if (is_gem_day(now) && is_bday) {
-                    verboseText += sprintf("%02d/%02d/%04d: free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
                 }
                 
                 if (is_bday && !is_gem_day(now)) {
-                    verboseText += sprintf("%02d/%02d/%04d: it's %s's birthday! You get 5 gems, which brings you to %d gems.\n", month(now), day(now), year(now), name, gems);
+                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />It's %s's birthday! You get 5 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
                 }
                 
                 if (is_gem_day(now) && !is_bday) {
-                    verboseText = verboseText + sprintf("%02d/%02d/%04d: free gem as login bonus, which brings you to %d gems.\n", month(now), day(now), year(now), gems);
+                    verboseText = verboseText + sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), gems);
                 }
             }
         }
@@ -457,10 +469,10 @@ function calculate_gems()
         
         $("#gem-result-summary").html(resultsString);
         if (verbose) {
-            $("#gem-result-verbose-area").val(verboseText);
+            $("#gem-result-verbose-area").html(verboseText);
             $("#gem-result-textarea").show();
         } else {
-            $("#gem-result-verbose-area").val(verboseText);
+            $("#gem-result-verbose-area").html(verboseText);
             $("#gem-result-textarea").hide();
         }
     }
