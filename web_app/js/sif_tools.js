@@ -31,6 +31,11 @@ var exp_table_r = [-1, 0, 14, 31, 45, 55, 67, 76, 85, 94, 103, 110, 119, 125, 13
 var exp_table_sr = [-1, 0, 54, 98, 127, 150, 169, 187, 203, 218, 232, 245, 257, 269, 281, 291, 302, 311, 322, 331, 340, 349, 358, 366, 374, 383, 391, 398, 406, 413, 421, 428, 435, 442, 449, 456, 462, 469, 475, 482, 488, 494, 500, 507, 512, 518, 524, 530, 536, 541, 547, 552, 558, 563, 568, 574, 579, 584, 590, 594, 600, 605, 609, 615, 619, 625, 629, 634, 639, 643, 648, 653, 657, 662, 667, 670, 676, 680, 684, 689, 693];
 var exp_table_ur = [-1, 0, 201, 294, 345, 382, 411, 438, 460, 481, 499, 517, 532, 547, 561, 574, 587, 598, 611, 621, 631, 642, 651, 661, 670, 679, 687, 696, 704, 712, 720, 727, 734, 742, 749, 755, 763, 769, 775, 782, 788, 794, 800, 806, 812, 818, 823, 829, 834, 840, 845, 850, 856, 860, 866, 870, 875, 880, 885, 890, 894, 899, 903, 908, 912, 917, 921, 925, 930, 933, 938, 942, 946, 950, 954, 959, 961, 966, 970, 974, 977, 981, 985, 988, 992, 996, 999, 1003, 1006, 1010, 1013, 1017, 1020, 1024, 1027, 1030, 1034, 1037, 1040, 1043, 1047];
 
+// global variable to keep event state, because we need it to live between function calls.
+// YES I KNOW THIS IS BAD. SO SUE ME. IT WORKS THOUGH. :P
+// 1 = token event, 2 = score match, 3 = medfes
+var current_type_of_event = 1;
+
 // debug logging
 function LOG(level, msg)
 {
@@ -104,11 +109,25 @@ function setup_ui_elements()
     $("input[name=card-mode]").change(handle_card_mode_select);
     
     // hide non-selected option divs
-    ["gem-desired-gems-area", "card-exp-area"].forEach(function(entry) {
+    ["gem-event-options-area", "gem-desired-gems-area", "card-exp-area"].forEach(function(entry) {
         var selector = "#" + entry;
         LOG(1, "setting up " + selector);
         $(selector).hide();
     });
+    
+    // set up checkbox change event handler
+    $("#gems_include_events").change(function() {
+        handle_gem_event_box(this.checked);
+    });
+}
+
+function handle_gem_event_box(show_it)
+{
+    if (show_it) {
+        $("#gem-event-options-area").show();
+    } else {
+        $("#gem-event-options-area").hide();
+    }
 }
 
 function setup_button_handlers()
@@ -353,6 +372,111 @@ function is_same_day(m1, m2)
         return true;
     }
     return false;
+}
+
+function handle_event(day_of_month, game_version, typical_tier)
+{
+    // format of returned tuple:
+    // tuple[0] - was this an event day? (boolean, duh)
+    // tuple[1] - name of event, or "" if none (string)
+    // tuple[2] - amount of gems spent (int)
+    // tuple[3] - amount of gems gained (int)
+    var return_tuple = [];
+    
+    return_tuple[0] = false;
+    return_tuple[1] = "";
+    return_tuple[2] = 0;
+    return_tuple[3] = 0;
+
+    // ok, if it's not the 1st or 15th, then no event is going on
+    if (day_of_month == 1 || day_of_month == 15) {
+        return_tuple[0] = true;
+        
+        // now we calculate!
+    
+        // according to /u/eryncerise, current "typical" tiering gem requirements are:
+        // Tier 1 = 10-15 gems, Tier 2 = 15-20 gems, no tier = (usually) no gems (assuming you play efficiently)
+        switch (typical_tier) {
+            case 1: return_tuple[2] = 20; break;
+            case 2: return_tuple[2] = 15; break;
+            case 3: return_tuple[2] = 0; break;
+        }
+        
+        // now handle different event types since they have different reward progressions
+        // TODO: need to use different tier cutoff point values depending on EN or JP (which means I need to go on tomodachi and average both EN and JP data
+        // for the past X events of each type. Fun for the whole family! :P)
+        switch (current_type_of_event) {
+            case 1:
+                // Token Event
+                return_tuple[1] = "Token Event";
+                // completion rewards: gems at 200, 1000, 4000, 15000, 18000, 21000, 25000 (2), 30000 (2), 35000 (3)
+                // event ranking rewards: tiers 1-4, no love gems for YOU! tier 5 on the other hand gets 3 of em!
+                if (typical_tier == 1) {
+                    // completion rewards: 
+                    // quick check of the last 5 token events on Tomodachi gives me a ballpark 30k average for t1 cutoff
+                    // (no one has gotten 35k so I am going to ignore that final gem reward in the completion rewards progression)
+                    // makes for a total of 10 gems
+                    // event rewards: tier 1, NO GEMS FOR YOU!
+                    return_tuple[3] = 10;
+                } else if (typical_tier == 2) {
+                    // completion rewards:
+                    // quick check of the last 5 token events on Tomodachi gives me a ballpark 23k average for t2 cutoff
+                    // makes for a total of 10 gems
+                    // event rewards: tier 2, NO GEMS FOR YOU!
+                    return_tuple[3] = 6;
+                } else {
+                    // completion reward: duh, Sr is at 11000, assume they stop playing there. +3
+                    // event rewards: they're only after the event SR, we optimistically assume that they manage to snag tier 5 if they got that far. +3 gems.
+                    return_tuple[3] = 6;
+                }
+                break;
+            case 2:
+                // Score Match
+                return_tuple[1] = "Score Match";
+                // NOTE: as I write this (10/18/15) EN is running a Token Event, which means unfortunately that the previous
+                // event (Score Match) data is no longer accessible. But JP just finished the Maki Score Match, so I can still
+                // get at the event rewards info. I am assuming that the event rewards are the same as EN (and that I am reading
+                // them correctly, a big assumption since I don't read Japanese :P )
+                // completion rewards: gems at 500, 2000, 8000, 35000, 42500, 50000, 60000 (2), 70000 (2), 80000 (3)
+                // event ranking rewards: tiers 1-2, no love gems for YOU! tier 3 gets 2 gems, tier 4 gets 2, tier 5 gets 4
+
+                if (typical_tier == 1) {
+                    // completion rewards: 
+                    // quick check of the last 5 token events on Tomodachi gives me a ballpark 30k average for t1 cutoff
+                    // (no one has gotten 35k so I am going to ignore that final gem reward in the completion rewards progression)
+                    // makes for a total of 10 gems
+                    // event rewards: tier 1, NO GEMS FOR YOU!
+                    return_tuple[3] = 10;
+                } else if (typical_tier == 2) {
+                    // completion rewards:
+                    // quick check of the last 5 token events on Tomodachi gives me a ballpark 23k average for t2 cutoff
+                    // makes for a total of 10 gems
+                    // event rewards: tier 2, NO GEMS FOR YOU!
+                    return_tuple[3] = 6;
+                } else {
+                    // completion reward: duh, Sr is at 11000, assume they stop playing there. +3
+                    // event rewards: they're only after the event SR, we optimistically assume that they manage to snag tier 5 if they got that far. +3 gems.
+                    return_tuple[3] = 6;
+                }
+                break;
+            case 3:
+                // Medley Festival
+                return_tuple[3] = "Medley Festival (INCOMPLETE)";
+                // TODO: I know NOTHING about medfes, and there is currently none going on on JP so I can't access reward data.
+                // So return bogus values for now.
+                return_tuple[3] = 0;
+                break;
+        }
+    }
+
+    // lastly bump the event type
+    current_type_of_event++;
+    if ((game_version === "EN" && current_type_of_event > 2) || (game_version === "JP" && current_type_of_event > 3)) {
+        current_type_of_event = 1;
+    }
+    
+    // now return what we got
+    return return_tuple;
 }
 
 function calculate_gems()
