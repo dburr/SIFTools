@@ -29,9 +29,9 @@
     <div id="tabs">
         <ul>
             <li><a href="#tab-rank">Rank</a></li>
-            <li><a href="#tab-love-gem">Gem</a></li>
-            <li><a href="#tab-card-level">Card</a></li>
-            <li><a href="#tab-event">Event</a></li>
+            <li><a href="#tab-love-gem">Gems</a></li>
+            <li><a href="#tab-card-level">Cards</a></li>
+            <li><a href="#tab-event">Events</a></li>
         </ul>
 
         <div id="tab-rank">
@@ -73,21 +73,22 @@
                   <option value="JP">JP</option>
               </select>
               <br /><br />
-            <input type="checkbox" name="gems_include_events" id="gems_include_events" value="YES" />Include gems from events?<br />
+            <input type="checkbox" name="gems_include_events" id="gems_include_events" value="YES" />Include gems from events? (<a href="#" id="To">Read this first</A>)<br />
             <div id="gem-event-options-area" align="center">
+<div id="dialog" title="About the Event Gem Calculator" style="display: none;">
+<p>Due to the variable nature of events, calculation of gems gotten through events is at best an approximation. To make the calculations simpler, it assumes that each month has 2 events, ending on the 1st and the 15th, and events alternate between token events and score matches (and medley festivals if on JP.) Also, if you are tiering, it assumes that you will spend some gems to tier, and will use an estimate based on your average tier, but this will only be an estimate.)</p>
+</div>
             Average tier:&nbsp;&nbsp;&nbsp;
                 <select id="gems_tier_level" name="gems_tier_level">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
+                  <option value="1">Tier 1</option>
+                  <option value="2">Tier 2</option>
                   <option value="0">Event SR only</option>
               </select>
-              <br />
-            (NOTE: due to the variable nature of events, calculation of gems gotten through events is at best an approximation. To make the calculations simpler, it assumes that each month has 2 events, ending on the 1st and the 15th, and events alternate between token events and score matches (and medley festivals if on JP.) Also, if you are tiering, it assumes that you will spend some gems to tier, and will use an estimate based on your average tier, but this will only be an estimate.)
               </div>
             <br />
             Mode:<br />
-            <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />Number of gems on date?<br />
-            <input type="radio" name="gem-mode" id="gem-mode" value="GEMS" />Date when you get <i>x</i> gems?<br /><br />
+            <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />Number of gems you'll have on a date?<br />
+            <input type="radio" name="gem-mode" id="gem-mode" value="GEMS" />Date you will have this many gems?<br /><br />
             <div id="gem-date-area">
                 Date:&nbsp;&nbsp;&nbsp;<input type="text" size="10" id="gem_desired_date" name="gem_desired_date" readonly="true" placeholder="MM/DD/YYYY" value="" />
             </div>
@@ -125,8 +126,8 @@
   Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_current_exp" name="card_current_exp" placeholder="optional" value="" />
   <br /><br />
   Mode:<br />
-  <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />EXP needed to level?<br />
-  <input type="radio" name="card-mode" id="card-mode" value="EXP" />Final level after feeding?<br /><br />
+  <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />EXP needed to get card to a level?<br />
+  <input type="radio" name="card-mode" id="card-mode" value="EXP" />Final level after feeding an amount of EXP?<br /><br />
   <div id="card-level-area">
     Desired level:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
 </div>

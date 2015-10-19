@@ -119,6 +119,13 @@ function setup_ui_elements()
     $("#gems_include_events").change(function() {
         handle_gem_event_box(this.checked);
     });
+    
+    // set up gem event calc note dialog
+    // $("#dialog").dialog({ autoOpen: false });
+    $("a#To").click(function(e) {
+      e.preventDefault();
+      $("#dialog").dialog({height:300});
+  });
 }
 
 function handle_gem_event_box(show_it)

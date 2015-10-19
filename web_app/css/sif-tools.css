@@ -1,13 +1,10 @@
 body {
  font: 100% "Trebuchet MS", sans-serif;
- margin: 50px;
+ font-family: Verdana,Arial,sans-serif;
+ font-size: 14px;
+ margin: 0px;
  background-color: #000000;
  color: #ffffff;
-}
-
-body {
-  font-family: Verdana,Arial,sans-serif;
-  font-size: 14px;
 }
 
 p {
