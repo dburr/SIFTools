@@ -46,6 +46,11 @@ function LOG(level, msg)
 
 // Main function, runs automatically at document-ready (i.e. when the page is finished loading)
 $(document).ready(function(){
+    // Hide the address bar on mobile browsers
+    setTimeout(function(){
+        // some sites suggest 0,0 - not sure which is correct
+        window.scrollTo(0, 1);
+    }, 0);
 	// set up UI (buttons, etc.)
 	setup_ui_elements();
 	// set up button handlers
