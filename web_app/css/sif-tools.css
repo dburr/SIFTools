@@ -5,6 +5,7 @@ body {
  margin: 0px;
  background-color: #000000;
  color: #ffffff;
+ min-height: 480px;
 }
 
 p {

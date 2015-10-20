@@ -48,8 +48,8 @@ function LOG(level, msg)
 $(document).ready(function(){
     // Hide the address bar on mobile browsers
     setTimeout(function(){
-        // some sites suggest 0,0 - not sure which is correct
-        window.scrollTo(0, 1);
+        // some sites suggest 0,0 and others 0,1 - not sure which is correct
+        window.scrollTo(0, 0);
     }, 0);
 	// set up UI (buttons, etc.)
 	setup_ui_elements();
