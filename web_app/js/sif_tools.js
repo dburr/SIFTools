@@ -76,16 +76,35 @@ function setup_ui_elements()
     // only set up keypads on mobile browsers
     // not sure what the best way of doing this is
     var pageWidth = $(window).width();
-    if (pageWidth > 1024) {
+    if (pageWidth < 1024) {
+        $( "#current_rank" ).prop('readonly', true);
         $( "#current_rank" ).keypad(); // {prompt: 'Enter here'}
+        $( "#current_exp" ).prop('readonly', true);
         $( "#current_exp" ).keypad(); // {prompt: 'Enter here'}
+        $( "#desired_rank" ).prop('readonly', true);
         $( "#desired_rank" ).keypad(); // {prompt: 'Enter here'}
+        $( "#current_gems" ).prop('readonly', true);
         $( "#current_gems" ).keypad(); // {prompt: 'Enter here'}
+        $( "#gem_desired_gems" ).prop('readonly', true);
         $( "#gem_desired_gems" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_current_level" ).prop('readonly', true);
         $( "#card_current_level" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_current_exp" ).prop('readonly', true);
         $( "#card_current_exp" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_desired_level" ).prop('readonly', true);
         $( "#card_desired_level" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_feed_exp" ).prop('readonly', true);
         $( "#card_feed_exp" ).keypad(); // {prompt: 'Enter here'}
+    } else {
+        $( "#current_rank" ).prop('readonly', false);
+        $( "#current_exp" ).prop('readonly', false);
+        $( "#desired_rank" ).prop('readonly', false);
+        $( "#current_gems" ).prop('readonly', false);
+        $( "#gem_desired_gems" ).prop('readonly', false);
+        $( "#card_current_level" ).prop('readonly', false);
+        $( "#card_current_exp" ).prop('readonly', false);
+        $( "#card_desired_level" ).prop('readonly', false);
+        $( "#card_feed_exp" ).prop('readonly', false);
     }
     
     // set up date/time pickers
