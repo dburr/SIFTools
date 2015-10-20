@@ -72,17 +72,21 @@ function setup_ui_elements()
 			set_up_tab(theTab);
 		}
 	});
-
-    // set up keypads
-    $( "#current_rank" ).keypad(); // {prompt: 'Enter here'}
-    $( "#current_exp" ).keypad(); // {prompt: 'Enter here'}
-    $( "#desired_rank" ).keypad(); // {prompt: 'Enter here'}
-    $( "#current_gems" ).keypad(); // {prompt: 'Enter here'}
-    $( "#gem_desired_gems" ).keypad(); // {prompt: 'Enter here'}
-    $( "#card_current_level" ).keypad(); // {prompt: 'Enter here'}
-    $( "#card_current_exp" ).keypad(); // {prompt: 'Enter here'}
-    $( "#card_desired_level" ).keypad(); // {prompt: 'Enter here'}
-    $( "#card_feed_exp" ).keypad(); // {prompt: 'Enter here'}
+    
+    // only set up keypads on mobile browsers
+    // not sure what the best way of doing this is
+    var pageWidth = $(window).width();
+    if (pageWidth > 1024) {
+        $( "#current_rank" ).keypad(); // {prompt: 'Enter here'}
+        $( "#current_exp" ).keypad(); // {prompt: 'Enter here'}
+        $( "#desired_rank" ).keypad(); // {prompt: 'Enter here'}
+        $( "#current_gems" ).keypad(); // {prompt: 'Enter here'}
+        $( "#gem_desired_gems" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_current_level" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_current_exp" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_desired_level" ).keypad(); // {prompt: 'Enter here'}
+        $( "#card_feed_exp" ).keypad(); // {prompt: 'Enter here'}
+    }
     
     // set up date/time pickers
     $( "#gem_desired_date" ).datepicker();
@@ -838,45 +842,42 @@ function run_timer()
     }
     $("#timer_output_area").html(string);
     
-    // dumb ass way to fetch and display @sifen_trackbot tier cutoff tweets hourly
-    // using this twitter fetcher: http://jasonmayes.com/projects/twitterApi/#sthash.budgYosd.dpbs
-    var config5 = {
-      "id": '654587648904794112',
-      "domId": '',
-      "maxTweets": 1,
-      "enableLinks": false,
-      "showUser": true,
-      "showTime": true,
-      "dateFunction": '',
-      "showRetweet": false,
-      "customCallback": handleTweets,
-      "showInteraction": false
-    };
-
-    function handleTweets(tweets) {
-        if (tweets.length > 0) {
-            var tweet = tweets[0];
-            // parse it
-            LOG(1, "GOT TWEET: " + tweet);
-            // !!! QUICK & DIRTY HACK ALERT !!!
-            // this is kinda crappy, @sifen_trackbot tweets come out as multiple lines separated by newlines
-            // so for now we just split the incoming tweet into an array of strings (one per line) and pull the values out using explicit line numbers
-            // we always assume Tier1 value is on line 11, Tier2 is line 12 and Date/time/% complete is line 13
-            // this may (in fact it probably will) change in the future
-            // eventually I would like to come up with a better (i.e. less crappy) algorithm to parse the string and extract the values dynamically
-            // but for now this will do :P
-            var splitTweet = tweet.split("\n");
-            var tier1 = splitTweet[11];
-            var tier2 = splitTweet[12];
-            var updateTime = splitTweet[13];
-            $("#tier_info_output_area").html("<h2>Latest Tier Cutoffs as of UTC " + updateTime + ":<br />" + tier1 + "<br />" + tier2 + "</h2>");
-        }
-    }
-
     // @sifen_trackbot updates come out at 36 minutes past the hour, fetch them at 37 minutes to allow for some slop
     if ((minute(now) == 37 && second(now) == 0) || window.immediately_refresh_tier_cutoffs)  {
         $("#tier_info_output_area").html("<h2>Updating tier cutoff data, please wait...</h2>");
-        twitterFetcher.fetch(config5);
+        // dumb ass way to fetch and display @sifen_trackbot tier cutoff tweets hourly
+        // using this twitter fetcher: http://jasonmayes.com/projects/twitterApi/#sthash.budgYosd.dpbs
+        twitterFetcher.fetch({
+            "id": '654587648904794112',
+            "domId": '',
+            "maxTweets": 1,
+            "enableLinks": false,
+            "showUser": true,
+            "showTime": true,
+            "dateFunction": '',
+            "showRetweet": false,
+            "customCallback": function(tweets) {
+                if (tweets.length > 0) {
+                    // we only care about the first one
+                    var tweet = tweets[0];
+                    LOG(1, "GOT TWEET: " + tweet);
+                    // now parse it
+                    // !!! QUICK & DIRTY HACK ALERT !!!
+                    // this is kinda crappy, @sifen_trackbot tweets come out as multiple lines separated by newlines
+                    // so for now we just split the incoming tweet into an array of strings (one per line) and pull the values out using explicit line numbers
+                    // we always assume Tier1 value is on line 11, Tier2 is line 12 and Date/time/% complete is line 13
+                    // this may (in fact it probably will) change in the future
+                    // eventually I would like to come up with a better (i.e. less crappy) algorithm to parse the string and extract the values dynamically
+                    // but for now this will do :P
+                    var splitTweet = tweet.split("\n");
+                    var tier1 = splitTweet[11];
+                    var tier2 = splitTweet[12];
+                    var updateTime = splitTweet[13];
+                    $("#tier_info_output_area").html("<h2>Latest Tier Cutoffs as of UTC " + updateTime + ":<br />" + tier1 + "<br />" + tier2 + "</h2>");
+                }
+            },
+            "showInteraction": false
+        });
         window.immediately_refresh_tier_cutoffs = false;
     }
 }
