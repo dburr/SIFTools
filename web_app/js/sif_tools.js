@@ -438,6 +438,8 @@ function is_same_day(m1, m2)
 
 function handle_event(day_of_month, game_version, typical_tier)
 {
+    LOG(1, "start event type is " + current_type_of_event);
+
     // format of returned tuple:
     // tuple[0] - was this an event day? (boolean, duh)
     // tuple[1] - name of event, or "" if none (string)
@@ -469,6 +471,7 @@ function handle_event(day_of_month, game_version, typical_tier)
         // for the past X events of each type. Fun for the whole family! :P)
         switch (current_type_of_event) {
             case 1:
+                LOG(1, "TOKEN");
                 // Token Event
                 return_tuple[1] = "Token Event";
                 // completion rewards: gems at 200, 1000, 4000, 15000, 18000, 21000, 25000 (2), 30000 (2), 35000 (3)
@@ -493,6 +496,7 @@ function handle_event(day_of_month, game_version, typical_tier)
                 }
                 break;
             case 2:
+                LOG(1, "SM");
                 // Score Match
                 return_tuple[1] = "Score Match";
                 // NOTE: as I write this (10/18/15) EN is running a Token Event, which means unfortunately that the previous
@@ -522,21 +526,24 @@ function handle_event(day_of_month, game_version, typical_tier)
                 }
                 break;
             case 3:
+                LOG(1, "MF");
                 // Medley Festival
-                return_tuple[3] = "Medley Festival (INCOMPLETE)";
+                return_tuple[1] = "Medley Festival (INCOMPLETE)";
                 // TODO: I know NOTHING about medfes, and there is currently none going on on JP so I can't access reward data.
                 // So return bogus values for now.
                 return_tuple[3] = 0;
                 break;
         }
+        
+        // lastly bump the event type
+        current_type_of_event++;
+        if ((game_version === "EN" && current_type_of_event > 2) || (game_version === "JP" && current_type_of_event > 3)) {
+            current_type_of_event = 1;
+        }
     }
 
-    // lastly bump the event type
-    current_type_of_event++;
-    if ((game_version === "EN" && current_type_of_event > 2) || (game_version === "JP" && current_type_of_event > 3)) {
-        current_type_of_event = 1;
-    }
-    
+    LOG(1, "end event type is " + current_type_of_event);
+    LOG(1, return_tuple);
     // now return what we got
     return return_tuple;
 }
@@ -552,6 +559,13 @@ function calculate_gems()
     if (isNaN(current_gems)) {
         alert("Error: invalid number of current gems. Please check your input and try again.");
         return;
+    }
+    var tier = parseInt($("#gems_tier_level").val());
+    var game_version = $("#gem_game_version").val();
+    var calc_daily_quest_gems = false;
+    var calc_event_gems = $("#gems_include_events").is(':checked');
+    if (game_version === "JP") {
+        calc_daily_quest_gems = $("#gems_include_daily_gems").is(':checked');
     }
     var mode = $("input[name=gem-mode]:checked").val();
     if (mode === "DATE")  {
@@ -575,6 +589,9 @@ function calculate_gems()
         // ready to rock
         var resultsString = sprintf("Today is %02d/%02d/%04d and you currently have %d love gems.<br />(Assuming you collected any gems you got today and already counted those.)", month(now), day(now), year(now), current_gems);
         var verboseText = "";
+        if (calc_daily_quest_gems) {
+            verboseText = "(Including daily 'quest' gems in the calculation. There will not be a separate daily entry for each one.)<br /><br />";
+        }
         var gems = current_gems
         now = now.add(1, 'days')
         while (now.isBefore(target_date_object) || is_same_day(now, target_date_object)) {
@@ -591,21 +608,74 @@ function calculate_gems()
                 gems += 5;
             }
             
-            // record verbose output if desired
-            if (verbose) {
-                if (is_gem_day(now) && is_bday) {
-                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
-                }
-                
-                if (is_bday && !is_gem_day(now)) {
-                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />It's %s's birthday! You get 5 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
-                }
-                
-                if (is_gem_day(now) && !is_bday) {
-                    verboseText = verboseText + sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), gems);
+            // account for daily login quest gem
+            if (calc_daily_quest_gems) {
+                gems++;
+            }
+            
+            // account for event
+            // format of returned tuple:
+            // tuple[0] - was this an event day? (boolean, duh)
+            // tuple[1] - name of event, or "" if none (string)
+            // tuple[2] - amount of gems spent (int)
+            // tuple[3] - amount of gems gained (int)
+            var event_results = handle_event(day(now), game_version, tier);
+            var is_event = event_results[0];
+            var event_name = "";
+            var spent_gems = 0;
+            var won_gems = 0;
+            if (is_event) {
+                event_name = event_results[1];
+                spent_gems = event_results[2];
+                won_gems = event_results[3];
+                // did any gems get spent?
+                if (spent_gems > 0) {
+                    // do we have enough to cover it?
+                    if (gems >= spent_gems) {
+                        // spend the gems
+                        gems -= spent_gems;
+                        // now reap the winnings
+                        gems += won_gems;
+                    } else {
+                        // flag to indicate that we didn't have the gems
+                        spent_gems = -1;
+                    }
+                } else {
+                    gems += won_gems;
                 }
             }
+            
+            // record verbose output if desired
+            if (verbose) {
+                if (is_gem_day(now) || is_bday || is_event)  {
+                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />", month(now), day(now), year(now));
 
+                    if (is_gem_day(now)) {
+                        verboseText += "Free gem as login bonus!<br />";
+                    }
+                
+                    if (is_bday) {
+                        verboseText += sprintf("It's %s's birthday! You get 5 gems!<br />", name);
+                    }
+                
+                    // account for events
+                    if (is_event) {
+                        verboseText += sprintf("A " + event_name + " just ended!<br />", month(now), day(now), year(now), event_name);
+                        if (spent_gems == -1)  {
+                            verboseText += "You didn't have enough gems to participate.<br />";
+                        } else {
+                            if (spent_gems == 0) {
+                                verboseText += sprintf("You didn't have to spend any gems, and you won %d gems!<br />", won_gems);
+                            } else {
+                                verboseText += sprintf("You spent %d gems, and you won %d gems.<br />", spent_gems, won_gems);
+                            }
+                        }
+                    }
+                    
+                    // add a newline                
+                    verboseText += sprintf("That brings you to %d gems!<br /><br />", gems);
+                }
+            }
             now = now.add(1, 'days')
         }
 
@@ -628,7 +698,10 @@ function calculate_gems()
         var now = moment(new Date());
         var resultsString = sprintf("Today is %02d/%02d/%04d and you currently have %d love gems.<br />(Assuming you collected any gems you got today and already counted those.)", month(now), day(now), year(now), current_gems);
         var verboseText = "";
-        
+        if (calc_daily_quest_gems) {
+            verboseText = "(Including daily 'quest' gems in the calculation. There will not be a separate daily entry for each one.)<br /><br />";
+        }
+
         var gems = current_gems
         
         while (gems < target_gems) {
@@ -647,18 +720,72 @@ function calculate_gems()
                 gems += 5;
             }
             
+            // account for daily login quest gem
+            if (calc_daily_quest_gems) {
+                gems++;
+            }
+            
+            // account for event
+            // format of returned tuple:
+            // tuple[0] - was this an event day? (boolean, duh)
+            // tuple[1] - name of event, or "" if none (string)
+            // tuple[2] - amount of gems spent (int)
+            // tuple[3] - amount of gems gained (int)
+            var event_results = handle_event(day(now), game_version, tier);
+            var is_event = event_results[0];
+            var event_name = "";
+            var spent_gems = 0;
+            var won_gems = 0;
+            if (is_event) {
+                event_name = event_results[1];
+                spent_gems = event_results[2];
+                won_gems = event_results[3];
+                // did any gems get spent?
+                if (spent_gems > 0) {
+                    // do we have enough to cover it?
+                    if (gems >= spent_gems) {
+                        // spend the gems
+                        gems -= spent_gems;
+                        // now reap the winnings
+                        gems += won_gems;
+                    } else {
+                        // flag to indicate that we didn't have the gems
+                        spent_gems = -1;
+                    }
+                } else {
+                    gems += won_gems;
+                }
+            }
+
             // record verbose output if desired
             if (verbose) {
-                if (is_gem_day(now) && is_bday) {
-                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus AND it's %s's birthday! You get 6 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
-                }
+                if (is_gem_day(now) || is_bday || is_event)  {
+                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />", month(now), day(now), year(now));
+
+                    if (is_gem_day(now)) {
+                        verboseText += "Free gem as login bonus!<br />";
+                    }
                 
-                if (is_bday && !is_gem_day(now)) {
-                    verboseText += sprintf("<b>%02d/%02d/%04d</b><br />It's %s's birthday! You get 5 gems, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), name, gems);
-                }
+                    if (is_bday) {
+                        verboseText += sprintf("It's %s's birthday! You get 5 gems!<br />", name);
+                    }
                 
-                if (is_gem_day(now) && !is_bday) {
-                    verboseText = verboseText + sprintf("<b>%02d/%02d/%04d</b><br />Free gem as login bonus, which brings you to %d gems.<br /><br />", month(now), day(now), year(now), gems);
+                    // account for events
+                    if (is_event) {
+                        verboseText += sprintf("A " + event_name + " just ended!<br />", month(now), day(now), year(now), event_name);
+                        if (spent_gems == -1)  {
+                            verboseText += "You didn't have enough gems to participate.<br />";
+                        } else {
+                            if (spent_gems == 0) {
+                                verboseText += sprintf("You didn't have to spend any gems, and you won %d gems!<br />", won_gems);
+                            } else {
+                                verboseText += sprintf("You spent %d gems, and you won %d gems.<br />", spent_gems, won_gems);
+                            }
+                        }
+                    }
+                    
+                    // add a newline                
+                    verboseText += sprintf("That brings you to %d gems!<br /><br />", gems);
                 }
             }
         }
