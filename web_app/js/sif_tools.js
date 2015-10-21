@@ -696,15 +696,20 @@ function calculate_gems()
         }
 
         var now = moment(new Date());
+        // arbitrary limit to make sure we don't go wander off into infinity
+        var cutoff = moment(now).add(5, 'years');
         var resultsString = sprintf("Today is %02d/%02d/%04d and you currently have %d love gems.<br />(Assuming you collected any gems you got today and already counted those.)", month(now), day(now), year(now), current_gems);
         var verboseText = "";
         if (calc_daily_quest_gems) {
             verboseText = "(Including daily 'quest' gems in the calculation. There will not be a separate daily entry for each one.)<br /><br />";
         }
+        
+        // make sure we don't go off into infinity (i.e. user gives input that is impossible to calculate)
+        var abort = false;
 
         var gems = current_gems
         
-        while (gems < target_gems) {
+        while (gems < target_gems && !abort) {
             now = now.add(1, 'days')
             
             // is it a login bonus?
@@ -788,10 +793,18 @@ function calculate_gems()
                     verboseText += sprintf("That brings you to %d gems!<br /><br />", gems);
                 }
             }
+            
+            // do we abort?
+            if (now.isAfter(cutoff))  {
+                verboseText += sprintf("(Cannot proceed, this appears to be an unattainable amount of gems given your constraints.)");
+                abort = true;
+            }
         }
 
         resultsString = resultsString + sprintf("<br />You will have %d love gems on %02d/%02d/%04d. Good things come to those who wait!", gems, month(now), day(now), year(now));
-        
+        if (abort) {
+            resultsString += "<br />(Note: the calculation was stopped because it appears that you will be unable to attain the desired amount of gems given your constraints.)";
+        }
         $("#gem-result-summary").html(resultsString);
         if (verbose) {
             $("#gem-result-verbose-area").html(verboseText);
