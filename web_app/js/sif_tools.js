@@ -550,6 +550,9 @@ function handle_event(day_of_month, game_version, typical_tier)
 
 function calculate_gems()
 {
+    // reset current event indicator (start out with a token event)
+    current_type_of_event = 1;
+
     var verbose = $("#gems_verbose").is(':checked');
     var current_gems_text = $("#current_gems").val();
     var current_gems = 0;
@@ -560,6 +563,7 @@ function calculate_gems()
         alert("Error: invalid number of current gems. Please check your input and try again.");
         return;
     }
+    
     var tier = parseInt($("#gems_tier_level").val());
     var game_version = $("#gem_game_version").val();
     var calc_daily_quest_gems = false;
