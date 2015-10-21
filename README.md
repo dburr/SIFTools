@@ -183,7 +183,7 @@ You will have 50 love gems on 01/16/2016. Good things come to those who wait!
 
 ## The Web App
 
-You asked for a web app, and here it is! The [web_app](web_app) directory contains a (mostly) fully featured web app version of SIF Tools. The best part is, you don't need a web server to run it. You should just be able to open the [sif_tools.html](web_app/sif_tools.html) file in your local web browser and run it right on your own computer. You will need to have JavaScript enabled in your browser however. (Of course you can host these files on a web server just like any other website, if you happen to have access to a web server.)
+You asked for a web app, and here it is! The [web_app](web_app) directory contains a fully featured web app version of SIF Tools. In fact, the web app actually does some things that the original Python scripts don't! (yet.) The best part is, you don't need a web server to run it. You should just be able to open the [sif_tools.html](web_app/sif_tools.html) file in your local web browser and run it right on your own computer. You will need to have JavaScript enabled in your browser however. (Of course you can host these files on a web server just like any other website, if you happen to have access to a web server.) Or you can run the copy hosted on my own web server [here](https://beta.DonaldBurr.com/sif_tools/sif_tools.html).
 
 ## Credits
 
