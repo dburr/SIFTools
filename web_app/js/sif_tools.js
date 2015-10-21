@@ -63,9 +63,13 @@ $(document).ready(function(){
 function setup_ui_elements()
 {
 	LOG(1, "setup_ui_elements()");
+    var default_tab = $.cookie("default_tab");
+    if (isNaN(default_tab)) {
+        default_tab = 0;
+    }
 
 	$( "#tabs" ).tabs({
-		active: 0,
+		active: default_tab,
 		create: function(event, ui) {
 			var theTab = ui.tab.index();
 			LOG(3, "INIT tab created " + theTab);
@@ -208,21 +212,25 @@ function set_up_tab(tab)
 function rank_calc_tab_selected()
 {
     LOG(1, "rank_calc_tab_selected");
+    $.cookie("default_tab", 0);
 }
 
 function love_gem_calc_tab_selected()
 {
 	LOG(1, "love_gem_calc_tab_selected");
+    $.cookie("default_tab", 1);
 }
 
 function card_level_calc_tab_selected()
 {
 	LOG(1, "card_level_calc_tab_selected");
+    $.cookie("default_tab", 2);
 }
 
 function event_end_calc_tab_selected()
 {
 	LOG(1, "event_end_calc_tab_selected");
+    $.cookie("default_tab", 3);
 }
 
 function calculate_rank()
