@@ -20,7 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/sifen_trackbot" data-widget-id="654587648904794112">Tweets by @sifen_trackbot</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+// TODO:
+// =====
+// * account for 1.2x bonus when feeding cards of the same attribute
+//   (maybe also the super (1.5) and ultra (2.0) success bonuses too?)
+// * @sifen_trackbot update code gets "stuck" sometimes - not sure if the problem
+//   is in the twitter fetcher or elsewhere
+// * needs a lot more error/bounds checking
 
 // Set to 0 to disable debugging, 1+ to enable debugging (higher = more verbose)
 var DEBUG_LEVEL = 0;
