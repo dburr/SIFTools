@@ -644,35 +644,37 @@ function calculate_gems() {
             if (calc_daily_quest_gems) {
                 gems++;
             }
-            // account for event
-            // format of returned tuple:
-            // tuple[0] - was this an event day? (boolean, duh)
-            // tuple[1] - name of event, or "" if none (string)
-            // tuple[2] - amount of gems spent (int)
-            // tuple[3] - amount of gems gained (int)
-            var event_results = handle_event(day(now), game_version, tier);
-            var is_event = event_results[0];
-            var event_name = "";
-            var spent_gems = 0;
-            var won_gems = 0;
-            if (is_event) {
-                event_name = event_results[1];
-                spent_gems = event_results[2];
-                won_gems = event_results[3];
-                // did any gems get spent?
-                if (spent_gems > 0) {
-                    // do we have enough to cover it?
-                    if (gems >= spent_gems) {
-                        // spend the gems
-                        gems -= spent_gems;
-                        // now reap the winnings
-                        gems += won_gems;
+            if (calc_event_gems) {
+                // account for event
+                // format of returned tuple:
+                // tuple[0] - was this an event day? (boolean, duh)
+                // tuple[1] - name of event, or "" if none (string)
+                // tuple[2] - amount of gems spent (int)
+                // tuple[3] - amount of gems gained (int)
+                var event_results = handle_event(day(now), game_version, tier);
+                var is_event = event_results[0];
+                var event_name = "";
+                var spent_gems = 0;
+                var won_gems = 0;
+                if (is_event) {
+                    event_name = event_results[1];
+                    spent_gems = event_results[2];
+                    won_gems = event_results[3];
+                    // did any gems get spent?
+                    if (spent_gems > 0) {
+                        // do we have enough to cover it?
+                        if (gems >= spent_gems) {
+                            // spend the gems
+                            gems -= spent_gems;
+                            // now reap the winnings
+                            gems += won_gems;
+                        } else {
+                            // flag to indicate that we didn't have the gems
+                            spent_gems = -1;
+                        }
                     } else {
-                        // flag to indicate that we didn't have the gems
-                        spent_gems = -1;
+                        gems += won_gems;
                     }
-                } else {
-                    gems += won_gems;
                 }
             }
             // record verbose output if desired
@@ -747,35 +749,37 @@ function calculate_gems() {
             if (calc_daily_quest_gems) {
                 gems++;
             }
-            // account for event
-            // format of returned tuple:
-            // tuple[0] - was this an event day? (boolean, duh)
-            // tuple[1] - name of event, or "" if none (string)
-            // tuple[2] - amount of gems spent (int)
-            // tuple[3] - amount of gems gained (int)
-            var event_results = handle_event(day(now), game_version, tier);
-            var is_event = event_results[0];
-            var event_name = "";
-            var spent_gems = 0;
-            var won_gems = 0;
-            if (is_event) {
-                event_name = event_results[1];
-                spent_gems = event_results[2];
-                won_gems = event_results[3];
-                // did any gems get spent?
-                if (spent_gems > 0) {
-                    // do we have enough to cover it?
-                    if (gems >= spent_gems) {
-                        // spend the gems
-                        gems -= spent_gems;
-                        // now reap the winnings
-                        gems += won_gems;
+            if (calc_event_gems) {
+                // account for event
+                // format of returned tuple:
+                // tuple[0] - was this an event day? (boolean, duh)
+                // tuple[1] - name of event, or "" if none (string)
+                // tuple[2] - amount of gems spent (int)
+                // tuple[3] - amount of gems gained (int)
+                var event_results = handle_event(day(now), game_version, tier);
+                var is_event = event_results[0];
+                var event_name = "";
+                var spent_gems = 0;
+                var won_gems = 0;
+                if (is_event) {
+                    event_name = event_results[1];
+                    spent_gems = event_results[2];
+                    won_gems = event_results[3];
+                    // did any gems get spent?
+                    if (spent_gems > 0) {
+                        // do we have enough to cover it?
+                        if (gems >= spent_gems) {
+                            // spend the gems
+                            gems -= spent_gems;
+                            // now reap the winnings
+                            gems += won_gems;
+                        } else {
+                            // flag to indicate that we didn't have the gems
+                            spent_gems = -1;
+                        }
                     } else {
-                        // flag to indicate that we didn't have the gems
-                        spent_gems = -1;
+                        gems += won_gems;
                     }
-                } else {
-                    gems += won_gems;
                 }
             }
             // record verbose output if desired
