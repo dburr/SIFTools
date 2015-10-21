@@ -139,9 +139,9 @@ function setup_ui_elements()
     // set up radio button listeners
     $("input[name=gem-mode]").change(handle_gem_mode_select);
     $("input[name=card-mode]").change(handle_card_mode_select);
-    
+
     // hide non-selected option divs
-    ["gem-event-options-area", "gem-desired-gems-area", "card-exp-area"].forEach(function(entry) {
+    ["gem-event-options-area", "gem-desired-gems-area", "card-exp-area", "gem_jp_daily_gems"].forEach(function(entry) {
         var selector = "#" + entry;
         LOG(1, "setting up " + selector);
         $(selector).hide();
@@ -154,10 +154,29 @@ function setup_ui_elements()
     
     // set up gem event calc note dialog
     // $("#dialog").dialog({ autoOpen: false });
-    $("a#To").click(function(e) {
+    $("a#gem_event_readme").click(function(e) {
       e.preventDefault();
-      $("#dialog").dialog({height:300});
-  });
+      $("#gem_event_readme_dialog").dialog({height:300});
+    });
+    $("a#gem_quest_readme").click(function(e) {
+      e.preventDefault();
+      $("#gem_quest_readme_dialog").dialog({height:300});
+    });
+    
+    // set up show/hide JP-only options
+    $('#gem_game_version').on('change', function (e) {
+        handle_gem_game_version_change();
+    });
+}
+
+function handle_gem_game_version_change()
+{
+    var game_version = $("#gem_game_version").val();
+    if (game_version === "JP") {
+        $("#gem_jp_daily_gems").show();
+    } else {
+        $("#gem_jp_daily_gems").hide();
+    }
 }
 
 function handle_gem_event_box(show_it)
