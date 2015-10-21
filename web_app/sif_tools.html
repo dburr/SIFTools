@@ -1,9 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <!-- width=320 -->
+  <meta name="generator" content="HTML Tidy for HTML5 for Mac OS X version 5.0.0">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes"><!-- width=320 -->
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
   <meta charset="utf-8">
   <title>SIF Tools</title>
@@ -11,175 +11,226 @@
   <link href="css/external/jquery.timepicker.css" rel="stylesheet">
   <link href="css/external/jquery.keypad.css" rel="stylesheet">
   <link href="css/sif_tools.css" rel="stylesheet">
-  <script src="js/external/jquery.js"></script>
-  <script src="js/external/jquery.cookie.js"></script>
-  <script src="js/external/jquery.plugin.js"></script> 
-  <script src="js/external/jquery.keypad.js"></script>
-  <script src="js/external/jquery-ui.js"></script>
-  <script src="js/external/jquery.timepicker.js"></script>
-  <script src="js/external/jquery-ui-sliderAccess.js"></script>
-  <script src="js/external/moment.js"></script>
-  <script src="js/external/sprintf.js"></script>
-  <script src="js/external/twitterFetcher.js"></script>
-  <script src="js/sif_tools.js"></script>
+  <script src="js/external/jquery.js">
+  </script>
+  <script src="js/external/jquery.cookie.js">
+  </script>
+  <script src="js/external/jquery.plugin.js">
+  </script>
+  <script src="js/external/jquery.keypad.js">
+  </script>
+  <script src="js/external/jquery-ui.js">
+  </script>
+  <script src="js/external/jquery.timepicker.js">
+  </script>
+  <script src="js/external/jquery-ui-sliderAccess.js">
+  </script>
+  <script src="js/external/moment.js">
+  </script>
+  <script src="js/external/sprintf.js">
+  </script>
+  <script src="js/external/twitterFetcher.js">
+  </script>
+  <script src="js/sif_tools.js">
+  </script>
 </head>
-
 <body>
-    <div id="header" align="center">
-        <h1>SIF Tools</h1>
-    </div>
-
-    <div id="tabs">
-        <ul>
-            <li><a href="#tab-rank">Rank</a></li>
-            <li><a href="#tab-love-gem">Gems</a></li>
-            <li><a href="#tab-card-level">Cards</a></li>
-            <li><a href="#tab-event">Events</a></li>
-        </ul>
-
-        <div id="tab-rank">
-            <div id="the-form" align="center">
-                Current Rank:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_rank" name="current_rank" placeholder="rank" value="" />
-                <br />
-                Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_exp" name="current_exp" placeholder="optional" value="" />
-                <br />
-                Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="desired_rank" name="desired_rank" placeholder="rank" value="" />
-                <br />
-                Game Version:&nbsp;&nbsp;&nbsp;
-                <select id="game_version" name="game_version">
-                  <option value="EN">EN</option>
-                  <option value="JP">JP</option>
-              </select>
-              <br /><br />
-              <div id="button-calculate-rank">Calculate</div>
-              <br /><br />
-              <div id="rank-calc-result-area">
-                  <h1>Results</h1>
-                  EXP required:&nbsp;&nbsp;&nbsp;<span id="rank-result-exp">-</span><br /><br />
-                  You will need to play the following number of songs in order to get this amount of EXP:<br /><br />
-                  EASY:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-easy">-</span><br />
-                  NORMAL:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-normal">-</span><br />
-                  HARD:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-hard">-</span><br />
-                  EXPERT:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-expert">-</span><br /><br/>
-                  At this rank you will have <span id="rank-results-lp">-</span> LP and <span id="rank-results-fp">-</span> friend slots.<br /><br />
-                  <div id="button-reset-rank">Reset</div>
-              </div>
-          </div>
-      </div>
-      <div id="tab-love-gem">
-          <div id="love-gem-form" align="center">
-          Current Gems:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_gems" name="current_gems" placeholder="optional" value="" />
-            <br />
-                            Game Version:&nbsp;&nbsp;&nbsp;
-                <select id="gem_game_version" name="gem_game_version">
-                  <option value="EN">EN</option>
-                  <option value="JP">JP</option>
-              </select>
-              <br /><br />
-            <span id="gem_jp_daily_gems"><input type="checkbox" name="gems_include_daily_gems" id="gems_include_daily_gems" value="YES" />Include daily "quest" gems?
-            (<a href="#" id="gem_quest_readme">What is this?</a>)<br />
-            <div id="gem_quest_readme_dialog" title="About JP Daily 'Quest' Gems" style="display: none;">
-            <p>On JP, you can now obtain a gem every day by completing the following steps, in the following order:</p>
-            <ol>
-            <li>Scout three Normal students. (The daily free scout counts.)</li>
-            <li>Clear five live shows (any difficulty.)</li>
-            <li>Practice ("feed") 5 cards of any kind.</li>
-            <li>Play a live show (any difficulty) and get a Full Combo.</li>
-            </ol>
-            </div>
-            </span>
-            <input type="checkbox" name="gems_include_events" id="gems_include_events" value="YES" />Include gems from events? (<a href="#" id="gem_event_readme">Read this first</A>)<br />
-            <div id="gem-event-options-area" align="center">
-<div id="gem_event_readme_dialog" title="About the Event Gem Calculator" style="display: none;">
-<p>Due to the variable nature of events, calculation of gems gotten through events is at best an approximation. To make the calculations simpler, it assumes that each month has 2 events, ending on the 1st and the 15th, and events alternate between token events and score matches (and medley festivals if on JP.) Also, if you are tiering, it assumes that you will spend some gems to tier, and will use an estimate based on your average tier, but this will only be an estimate.)</p>
-</div>
-            Average tier:&nbsp;&nbsp;&nbsp;
-                <select id="gems_tier_level" name="gems_tier_level">
-                  <option value="1">Tier 1</option>
-                  <option value="2">Tier 2</option>
-                  <option value="0">Event SR only</option>
-              </select>
-              </div>
-            <br />
-            Mode:<br />
-            <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked />Number of gems you'll have on a date?<br />
-            <input type="radio" name="gem-mode" id="gem-mode" value="GEMS" />Date you will have this many gems?<br /><br />
-            <div id="gem-date-area">
-                Date:&nbsp;&nbsp;&nbsp;<input type="text" size="10" id="gem_desired_date" name="gem_desired_date" readonly="true" placeholder="MM/DD/YYYY" value="" />
-            </div>
-            <div id="gem-desired-gems-area">
-                Desired gems:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="gem_desired_gems" name="gem_desired_gems" placeholder="gems" value="" />
-            </div>
-            <br /><br />
-            <input type="checkbox" name="gems_verbose" id="gems_verbose" value="YES" />Verbose Mode<br />
-            <br /><br />
-            <div id="button-calculate-gems">Calculate</div>
-            <br /><br />
-            <div id="gem-calc-result-area">
-              <h1>Results</h1>
-              <span id="gem-result-summary">-</span><br /><br />
-              <div id="gem-result-verbose-area">
-              <div id="gem-result-textarea">-</div>
-              </div>
-              <div id="button-reset-gems">Reset</div>
-          </div>
-      </div>
+  <div id="header" align="center">
+    <h1>SIF Tools</h1>
   </div>
-
-<div id="tab-card-level">
-  <div id="love-gem-form" align="center">
-    Card Rarity:&nbsp;&nbsp;&nbsp;
-    <select id="card_rarity" name="card_rarity">
-      <option value="N">N</option>
-      <option value="R">R</option>
-      <option value="SR">SR</option>
-      <option value="UR">UR</option>
-  </select>
-  <br />
-  Current Level:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_current_level" name="card_current_level" placeholder="level" value="" />
-  <br />
-  Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_current_exp" name="card_current_exp" placeholder="optional" value="" />
-  <br /><br />
-  Mode:<br />
-  <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked />EXP needed to get card to a level?<br />
-  <input type="radio" name="card-mode" id="card-mode" value="EXP" />Final level after feeding an amount of EXP?<br /><br />
-  <div id="card-level-area">
-    Desired level:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_desired_level" name="card_desired_level" placeholder="level" value="" />
-</div>
-<div id="card-exp-area">
-    EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_feed_exp" name="card_feed_exp" placeholder="exp" value="" />
-</div>
-<br /><br />
-<div id="button-calculate-card">Calculate</div>
-<br /><br />
-<div id="card-calc-result-area">
-  <h1>Results</h1>
-  <span id="card-result-summary">-</span><br /><br />
-  <div id="button-reset-card">Reset</div>
-</div>
-</div>
-</div>
-
-<div id="tab-event">
-  <div id="event-timer-form" align="center">
-      <h3>Enter Event End Date/Time (in UTC):</h3><br />
-      <input type="text" size="10" id="event_end_date" name="event_end_date" readonly="true" placeholder="MM/DD/YYYY" value="" />
-      <input type="text" size="5" id="event_end_time" name="event_end_time" readonly="true" placeholder="HH:MM" value="" />
-      <br /><br />
-      <div id="button-start-stop-timer">Start Timer</div>
-      <div id="timer_output_area" align="center">
-        <h1>Timer Not Running</h1>
+  <div id="tabs">
+    <ul>
+      <li>
+        <a href="#tab-rank">Rank</a>
+      </li>
+      <li>
+        <a href="#tab-love-gem">Gems</a>
+      </li>
+      <li>
+        <a href="#tab-card-level">Cards</a>
+      </li>
+      <li>
+        <a href="#tab-event">Events</a>
+      </li>
+    </ul>
+    <div id="tab-rank">
+      <div id="the-form" align="center">
+        Current Rank:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_rank" name="current_rank" placeholder="rank" value=""><br>
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_exp" name="current_exp" placeholder="optional" value=""><br>
+        Desired Rank:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="desired_rank" name="desired_rank" placeholder="rank" value=""><br>
+        Game Version:&nbsp;&nbsp;&nbsp; <select id="game_version" name="game_version">
+          <option value="EN">
+            EN
+          </option>
+          <option value="JP">
+            JP
+          </option>
+        </select><br>
+        <br>
+        <div id="button-calculate-rank">
+          Calculate
+        </div><br>
+        <br>
+        <div id="rank-calc-result-area">
+          <h1>Results</h1>EXP required:&nbsp;&nbsp;&nbsp;<span id="rank-result-exp">-</span><br>
+          <br>
+          You will need to play the following number of songs in order to get this amount of EXP:<br>
+          <br>
+          EASY:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-easy">-</span><br>
+          NORMAL:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-normal">-</span><br>
+          HARD:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-hard">-</span><br>
+          EXPERT:&nbsp;&nbsp;&nbsp;<span id="rank-result-songs-expert">-</span><br>
+          <br>
+          At this rank you will have <span id="rank-results-lp">-</span> LP and <span id="rank-results-fp">-</span> friend slots.<br>
+          <br>
+          <div id="button-reset-rank">
+            Reset
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="tier_info_output_area" align="center">
+    <div id="tab-love-gem">
+      <div id="love-gem-form" align="center">
+        Current Gems:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="current_gems" name="current_gems" placeholder="optional" value=""><br>
+        Game Version:&nbsp;&nbsp;&nbsp; <select id="gem_game_version" name="gem_game_version">
+          <option value="EN">
+            EN
+          </option>
+          <option value="JP">
+            JP
+          </option>
+        </select><br>
+        <br>
+        <span id="gem_jp_daily_gems"><input type="checkbox" name="gems_include_daily_gems" id="gems_include_daily_gems" value="YES">Include daily "quest" gems?
+        (<a href="#" id="gem_quest_readme">What is this?</a>)<br></span>
+        <div id="gem_quest_readme_dialog" title="About JP Daily 'Quest' Gems" style="display: none;">
+          <span id="gem_jp_daily_gems"></span>
+          <p><span id="gem_jp_daily_gems">On JP, you can now obtain a gem every day by completing the following steps, in the following order:</span></p>
+          <ol>
+            <li><span id="gem_jp_daily_gems">Scout three Normal students. (The daily free scout counts.)</span></li>
+            <li><span id="gem_jp_daily_gems">Clear five live shows (any difficulty.)</span></li>
+            <li><span id="gem_jp_daily_gems">Practice ("feed") 5 cards of any kind.</span></li>
+            <li><span id="gem_jp_daily_gems">Play a live show (any difficulty) and get a Full Combo.</span></li>
+          </ol>
+        </div><input type="checkbox" name="gems_include_events" id="gems_include_events" value="YES">Include gems from events? (<a href="#" id=
+        "gem_event_readme">Read this first</a>)<br>
+        <div id="gem-event-options-area" align="center">
+          <div id="gem_event_readme_dialog" title="About the Event Gem Calculator" style="display: none;">
+            <p>Due to the variable nature of events, calculation of gems gotten through events is at best an approximation. To make the calculations simpler,
+            it assumes that each month has 2 events, ending on the 1st and the 15th, and events alternate between token events and score matches (and medley
+            festivals if on JP.) Also, if you are tiering, it assumes that you will spend some gems to tier, and will use an estimate based on your average
+            tier, but this will only be an estimate.)</p>
+          </div>Average tier:&nbsp;&nbsp;&nbsp; <select id="gems_tier_level" name="gems_tier_level">
+            <option value="1">
+              Tier 1
+            </option>
+            <option value="2">
+              Tier 2
+            </option>
+            <option value="0">
+              Event SR only
+            </option>
+          </select>
+        </div><br>
+        Mode:<br>
+        <input type="radio" name="gem-mode" id="gem-mode" value="DATE" checked>Number of gems you'll have on a date?<br>
+        <input type="radio" name="gem-mode" id="gem-mode" value="GEMS">Date you will have this many gems?<br>
+        <br>
+        <div id="gem-date-area">
+          Date:&nbsp;&nbsp;&nbsp;<input type="text" size="10" id="gem_desired_date" name="gem_desired_date" readonly="true" placeholder="MM/DD/YYYY" value="">
+        </div>
+        <div id="gem-desired-gems-area">
+          Desired gems:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="gem_desired_gems" name="gem_desired_gems" placeholder="gems" value="">
+        </div><br>
+        <br>
+        <input type="checkbox" name="gems_verbose" id="gems_verbose" value="YES">Verbose Mode<br>
+        <br>
+        <br>
+        <div id="button-calculate-gems">
+          Calculate
+        </div><br>
+        <br>
+        <div id="gem-calc-result-area">
+          <h1>Results</h1><span id="gem-result-summary">-</span><br>
+          <br>
+          <div id="gem-result-verbose-area">
+            <div id="gem-result-textarea">
+              -
+            </div>
+          </div>
+          <div id="button-reset-gems">
+            Reset
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="button-clear-timer">Clear Timer</div>
-</div>
-
-<div id="error-dialog" title="Error">
-  <p><span id="error-text" /></p>
-</div>
-</div>
-</div>
-
+    <div id="tab-card-level">
+      <div id="love-gem-form" align="center">
+        Card Rarity:&nbsp;&nbsp;&nbsp; <select id="card_rarity" name="card_rarity">
+          <option value="N">
+            N
+          </option>
+          <option value="R">
+            R
+          </option>
+          <option value="SR">
+            SR
+          </option>
+          <option value="UR">
+            UR
+          </option>
+        </select><br>
+        Current Level:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_current_level" name="card_current_level" placeholder="level"
+        value=""><br>
+        Current EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_current_exp" name="card_current_exp" placeholder="optional" value=
+        ""><br>
+        <br>
+        Mode:<br>
+        <input type="radio" name="card-mode" id="card-mode" value="LEVEL" checked>EXP needed to get card to a level?<br>
+        <input type="radio" name="card-mode" id="card-mode" value="EXP">Final level after feeding an amount of EXP?<br>
+        <br>
+        <div id="card-level-area">
+          Desired level:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_desired_level" name="card_desired_level" placeholder="level"
+          value="">
+        </div>
+        <div id="card-exp-area">
+          EXP:&nbsp;&nbsp;&nbsp;<input type="text" readonly="true" size="5" id="card_feed_exp" name="card_feed_exp" placeholder="exp" value="">
+        </div><br>
+        <br>
+        <div id="button-calculate-card">
+          Calculate
+        </div><br>
+        <br>
+        <div id="card-calc-result-area">
+          <h1>Results</h1><span id="card-result-summary">-</span><br>
+          <br>
+          <div id="button-reset-card">
+            Reset
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tab-event">
+      <div id="event-timer-form" align="center">
+        <h3>Enter Event End Date/Time (in UTC):</h3><br>
+        <input type="text" size="10" id="event_end_date" name="event_end_date" readonly="true" placeholder="MM/DD/YYYY" value=""> <input type="text" size="5"
+        id="event_end_time" name="event_end_time" readonly="true" placeholder="HH:MM" value=""><br>
+        <br>
+        <div id="button-start-stop-timer">
+          Start Timer
+        </div>
+        <div id="timer_output_area" align="center">
+          <h1>Timer Not Running</h1>
+        </div>
+        <div id="tier_info_output_area" align="center"></div>
+        <div id="button-clear-timer">
+          Clear Timer
+        </div>
+      </div>
+      <div id="error-dialog" title="Error">
+        <p><span id="error-text"></span></p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
