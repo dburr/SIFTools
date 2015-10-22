@@ -27,8 +27,6 @@
 // * Card Level Calc:
 //   - account for 1.2x bonus when feeding cards of the same attribute
 //   - maybe also the super (1.5) and ultra (2.0) success bonuses too?
-//   - detect "overkill" (i.e. feeding too much EXP to a card)
-//   - add "max level" button to automatically fill in the max level of the given type of card
 // * Event Tracker:
 //   - if time remaining < 24 don't put parenthesis around the hours/minutes/seconds display
 //   - @sifen_trackbot update code gets "stuck" sometimes - not sure if the problem
@@ -173,7 +171,7 @@ function setup_ui_elements() {
         disableTextInput: true
     });
     // set up buttons
-    [ "calculate-rank", "reset-rank", "calculate-gems", "reset-gems", "calculate-card", "reset-card", "start-stop-timer", "clear-timer" ].forEach(function(entry) {
+    [ "calculate-rank", "reset-rank", "calculate-gems", "reset-gems", "card-max-level", "calculate-card", "reset-card", "start-stop-timer", "clear-timer" ].forEach(function(entry) {
         var selector = "#button-" + entry;
         LOG(1, "setting up " + selector);
         $(selector).button();
@@ -246,6 +244,9 @@ function setup_button_handlers() {
     });
     $("#button-reset-gems").click(function(evt) {
         reset_gems();
+    });
+    $("#button-card-max-level").click(function(evt) {
+        card_set_max_level();
     });
     $("#button-calculate-card").click(function(evt) {
         calculate_card();
@@ -380,6 +381,18 @@ function handle_gem_mode_select() {
         $("#gem-date-area").hide();
         $("#gem-desired-gems-area").show();
     }
+}
+
+function card_set_max_level() {
+    var card_type = $("#card_rarity").val();
+    var level = 0;
+    switch (card_type) {
+        case "N": level = 40; break;
+        case "R": level = 60; break;
+        case "SR": level = 80; break;
+        case "UR": level = 100; break;
+    }
+    $("#card_desired_level").val(level);
 }
 
 function handle_card_mode_select() {
@@ -952,7 +965,12 @@ function calculate_card() {
             }
         }
         level--;
-        var resultString = sprintf("If you feed a %s card at level %d (with %d EXP) a total of %d EXP,<br />it will end up at level %d.%s", rarity, current_level, current_exp, exp_to_feed, level, level == get_level_cap(rarity) ? " (MAX LEVEL!)" : "");
+        var resultString = "";
+        if (exp_to_feed > exp_tally) {
+            resultString = sprintf("If you feed a %s card at level %d (with %d EXP) a total of %d EXP,<br />it will end up at level %d.%s<br />This is way overkill, you fed %d more EXP than was necessary.", rarity, current_level, current_exp, exp_to_feed, level, (level == get_level_cap(rarity) ? " (MAX LEVEL!)" : ""), exp_to_feed - exp_tally);
+        } else {
+            resultString = sprintf("If you feed a %s card at level %d (with %d EXP) a total of %d EXP,<br />it will end up at level %d.%s", rarity, current_level, current_exp, exp_to_feed, level, level == get_level_cap(rarity) ? " (MAX LEVEL!)" : "");
+        }
         // output the result
         $("#card-result-summary").html(resultString);
     }
@@ -1022,8 +1040,8 @@ function run_timer() {
         string += "<h1>EVENT IS OVER</h1>";
     }
     $("#timer_output_area").html(string);
-    // @sifen_trackbot updates come out at 36 minutes past the hour, fetch them at 37 minutes to allow for some slop
-    if (minute(now) == 37 && second(now) == 0 || window.immediately_refresh_tier_cutoffs) {
+    // @sifen_trackbot updates come out at 36 minutes past the hour, fetch them at 38 minutes to allow for some slop
+    if (minute(now) == 38 && second(now) == 0 || window.immediately_refresh_tier_cutoffs) {
         $("#tier_info_output_area").html("<h2>Updating tier cutoff data, please wait...</h2>");
         // dumb ass way to fetch and display @sifen_trackbot tier cutoff tweets hourly
         // using this twitter fetcher: http://jasonmayes.com/projects/twitterApi/#sthash.budgYosd.dpbs
