@@ -384,14 +384,8 @@ function handle_gem_mode_select() {
 }
 
 function card_set_max_level() {
-    var card_type = $("#card_rarity").val();
-    var level = 0;
-    switch (card_type) {
-        case "N": level = 40; break;
-        case "R": level = 60; break;
-        case "SR": level = 80; break;
-        case "UR": level = 100; break;
-    }
+    var rarity = $("#card_rarity").val();
+    var level = get_level_cap(rarity);
     $("#card_desired_level").val(level);
 }
 
