@@ -185,12 +185,6 @@ function setup_ui_elements() {
     // set up radio button listeners
     $("input[name=gem-mode]").change(handle_gem_mode_select);
     $("input[name=card-mode]").change(handle_card_mode_select);
-    // hide non-selected option divs
-    [ "gem-event-options-area", "gem-desired-gems-area", "card-exp-area", "gem_jp_daily_gems" ].forEach(function(entry) {
-        var selector = "#" + entry;
-        LOG(1, "setting up " + selector);
-        $(selector).hide();
-    });
     // set up checkbox change event handler
     $("#gems_include_events").change(function() {
         handle_gem_event_box(this.checked);
@@ -213,6 +207,51 @@ function setup_ui_elements() {
     $("#gem_game_version").on("change", function(e) {
         handle_gem_game_version_change();
     });
+    // update the UI based on what is selected
+    update_ui();
+}
+
+// show/hide option div's based on which modes are selected
+function update_ui()
+{
+    // gem screen - show/hide the options based on game version
+    var gem_game_version = $("#gem_game_version").val();
+    if (gem_game_version === "JP") {
+        $("#gem_jp_daily_gems").show();
+    } else {
+        $("#gem_jp_daily_gems").hide();
+    }
+    // gem screen - hide event tier selector
+    var gem_events_selected = $("#gems_include_events").is(":checked");
+    if (gem_events_selected) {
+        $("#gem-event-options-area").show();
+    } else {
+        $("#gem-event-options-area").hide();
+    }
+    // gem screen - mode
+    var gem_mode = $("#gem-mode").val();
+    switch(gem_mode) {
+        case "DATE":
+            $("#gem-date-area").show();
+            $("#gem-desired-gems-area").hide();
+            break;
+        case "GEMS":
+            $("#gem-date-area").hide();
+            $("#gem-desired-gems-area").show();
+            break;
+    }
+    // card screen - mode
+    var card_mode = $("#card-mode").val();
+    switch(card_mode) {
+        case "LEVEL":
+            $("#card-level-area").show();
+            $("#card-exp-area").hide();
+            break;
+        case "EXP":
+            $("#card-level-area").hide();
+            $("#card-exp-area").show();
+            break;
+    }
 }
 
 function handle_gem_game_version_change() {
