@@ -187,7 +187,7 @@ function setup_ui_elements() {
     $("input[name=card-mode]").change(handle_card_mode_select);
     // set up checkbox change event handler
     $("#gems_include_events").change(function() {
-        handle_gem_event_box(this.checked);
+        update_ui();
     });
     // set up gem event calc note dialog
     // $("#dialog").dialog({ autoOpen: false });
@@ -205,7 +205,7 @@ function setup_ui_elements() {
     });
     // set up show/hide JP-only options
     $("#gem_game_version").on("change", function(e) {
-        handle_gem_game_version_change();
+        update_ui();
     });
     // update the UI based on what is selected
     update_ui();
@@ -251,23 +251,6 @@ function update_ui()
             $("#card-level-area").hide();
             $("#card-exp-area").show();
             break;
-    }
-}
-
-function handle_gem_game_version_change() {
-    var game_version = $("#gem_game_version").val();
-    if (game_version === "JP") {
-        $("#gem_jp_daily_gems").show();
-    } else {
-        $("#gem_jp_daily_gems").hide();
-    }
-}
-
-function handle_gem_event_box(show_it) {
-    if (show_it) {
-        $("#gem-event-options-area").show();
-    } else {
-        $("#gem-event-options-area").hide();
     }
 }
 
@@ -397,6 +380,28 @@ function calculate_rank() {
     }
 }
 
+function handle_gem_mode_select() {
+    var mode = $(this).val();
+    if (mode === "DATE") {
+        $("#gem-date-area").show();
+        $("#gem-desired-gems-area").hide();
+    } else if (mode === "GEMS") {
+        $("#gem-date-area").hide();
+        $("#gem-desired-gems-area").show();
+    }
+}
+
+function handle_card_mode_select() {
+    var mode = $(this).val();
+    if (mode === "LEVEL") {
+        $("#card-level-area").show();
+        $("#card-exp-area").hide();
+    } else if (mode === "EXP") {
+        $("#card-level-area").hide();
+        $("#card-exp-area").show();
+    }
+}
+
 function reset_rank() {
     $("#rank-calc-result-area").hide();
     $("#current_rank").val("");
@@ -411,32 +416,10 @@ function reset_rank() {
     $("#rank-results-fp").text("-");
 }
 
-function handle_gem_mode_select() {
-    var mode = $(this).val();
-    if (mode === "DATE") {
-        $("#gem-date-area").show();
-        $("#gem-desired-gems-area").hide();
-    } else if (mode === "GEMS") {
-        $("#gem-date-area").hide();
-        $("#gem-desired-gems-area").show();
-    }
-}
-
 function card_set_max_level() {
     var rarity = $("#card_rarity").val();
     var level = get_level_cap(rarity);
     $("#card_desired_level").val(level);
-}
-
-function handle_card_mode_select() {
-    var mode = $(this).val();
-    if (mode === "LEVEL") {
-        $("#card-level-area").show();
-        $("#card-exp-area").hide();
-    } else if (mode === "EXP") {
-        $("#card-level-area").hide();
-        $("#card-exp-area").show();
-    }
 }
 
 function is_muse_members_birthday(moment) {
@@ -517,7 +500,7 @@ function is_same_day(m1, m2) {
     return false;
 }
 
-function handle_event(day_of_month, game_version, typical_tier) {
+function calculate_event(day_of_month, game_version, typical_tier) {
     LOG(1, "start event type is " + current_type_of_event);
     // format of returned tuple:
     // tuple[0] - was this an event day? (boolean, duh)
@@ -697,7 +680,7 @@ function calculate_gems() {
                 // tuple[1] - name of event, or "" if none (string)
                 // tuple[2] - amount of gems spent (int)
                 // tuple[3] - amount of gems gained (int)
-                var event_results = handle_event(day(now), game_version, tier);
+                var event_results = calculate_event(day(now), game_version, tier);
                 var is_event = event_results[0];
                 var event_name = "";
                 var spent_gems = 0;
@@ -802,7 +785,7 @@ function calculate_gems() {
                 // tuple[1] - name of event, or "" if none (string)
                 // tuple[2] - amount of gems spent (int)
                 // tuple[3] - amount of gems gained (int)
-                var event_results = handle_event(day(now), game_version, tier);
+                var event_results = calculate_event(day(now), game_version, tier);
                 var is_event = event_results[0];
                 var event_name = "";
                 var spent_gems = 0;
