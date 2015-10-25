@@ -25,7 +25,6 @@
 // * General improvements:
 //   - needs a lot more error/bounds checking in general
 // * Card Level Calc:
-//   - account for 1.2x bonus when feeding cards of the same attribute
 //   - maybe also the super (1.5) and ultra (2.0) success bonuses too?
 // * Event Tracker:
 //   - if time remaining < 24 don't put parenthesis around the hours/minutes/seconds display
@@ -913,6 +912,7 @@ function is_valid_exp(rarity, level, exp) {
 function calculate_card() {
     var current_level = parseInt($("#card_current_level").val());
     var current_exp_input = $("#card_current_exp").val();
+    var same_attribute = $("#card_same_attribute").is(":checked"); // 1.2x bonus for feeding same attribute cards
     var current_exp = 0;
     if (current_exp_input != "") {
         current_exp = parseInt(current_exp_input);
@@ -937,15 +937,21 @@ function calculate_card() {
         var required_exp = 0;
         var resultsString = "";
         for (level = current_level + 1; level <= target_level; level++) {
+            var exp = 0;
             if (rarity === "N") {
-                required_exp += exp_table_n[level];
+                exp = exp_table_n[level];
             } else if (rarity === "R") {
-                required_exp += exp_table_r[level];
+                exp = exp_table_r[level];
             } else if (rarity === "SR") {
-                required_exp += exp_table_sr[level];
+                exp = exp_table_sr[level];
             } else if (rarity === "UR") {
-                required_exp += exp_table_ur[level];
+                exp = exp_table_ur[level];
             }
+            required_exp += exp;
+        }
+        if (same_attribute) {
+            // feeding cards of same attribute get a 1.2x bonus, so reduce the needed exp by that
+            required_exp = Math.floor(required_exp / 1.2);
         }
         // subtract what we have
         required_exp -= current_exp;
@@ -961,12 +967,18 @@ function calculate_card() {
             window.alert("Error: you have entered an invalid (non-numeric) value. Please check your input and try again.");
             return;
         }
+        var real_exp_to_feed = exp_to_feed;
+        if (same_attribute) {
+            // feeding cards of same attribute get a 1.2x bonus, so reduce the needed exp by that
+            real_exp_to_feed = Math.round(real_exp_to_feed * 1.2);
+        }
         // ready to rock
         var resultsString = "FOO";
         // XXX do some calculating
         var exp_tally = current_exp;
         var level = 0;
         for (level = current_level + 1; level <= get_level_cap(rarity); level++) {
+            var exp_temp = 0;
             if (rarity === "N") {
                 exp_tally += exp_table_n[level];
             } else if (rarity === "R") {
@@ -976,7 +988,7 @@ function calculate_card() {
             } else if (rarity === "UR") {
                 exp_tally += exp_table_ur[level];
             }
-            if (exp_tally > exp_to_feed) {
+            if (exp_tally > real_exp_to_feed) {
                 break;
             }
         }
