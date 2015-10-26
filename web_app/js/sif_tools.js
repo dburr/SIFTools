@@ -35,6 +35,7 @@
 var DEBUG_LEVEL = 0;
 
 // EXP tables
+// from: http://www59.atwiki.jp/lovelive-sif/pages/32.html
 var exp_table_n = [ -1, 0, 6, 18, 28, 40, 51, 61, 72, 82, 93, 104, 114, 124, 135, 145, 156, 165, 176, 187, 196, 207, 217, 226, 238, 247, 257, 268, 277, 288, 297, 308, 317, 328, 337, 348, 358, 367, 377, 388, 397 ];
 
 var exp_table_r = [ -1, 0, 14, 31, 45, 55, 67, 76, 85, 94, 103, 110, 119, 125, 134, 140, 148, 155, 161, 168, 174, 181, 187, 193, 199, 206, 211, 217, 223, 228, 235, 240, 245, 251, 256, 262, 267, 272, 277, 283, 288, 292, 298, 303, 308, 313, 317, 323, 327, 332, 337, 342, 346, 351, 356, 360, 365, 370, 374, 378, 383 ];
@@ -909,6 +910,20 @@ function is_valid_exp(rarity, level, exp) {
     return return_value;
 }
 
+function get_exp_table_entry(rarity, level) {
+    var exp = 0;
+   if (rarity === "N") {
+        exp = exp_table_n[level];
+    } else if (rarity === "R") {
+        exp = exp_table_r[level];
+    } else if (rarity === "SR") {
+        exp = exp_table_sr[level];
+    } else if (rarity === "UR") {
+        exp = exp_table_ur[level];
+    }
+    return exp;
+}
+
 function calculate_card() {
     var current_level = parseInt($("#card_current_level").val());
     var current_exp_input = $("#card_current_exp").val();
@@ -937,17 +952,7 @@ function calculate_card() {
         var required_exp = 0;
         var resultsString = "";
         for (level = current_level + 1; level <= target_level; level++) {
-            var exp = 0;
-            if (rarity === "N") {
-                exp = exp_table_n[level];
-            } else if (rarity === "R") {
-                exp = exp_table_r[level];
-            } else if (rarity === "SR") {
-                exp = exp_table_sr[level];
-            } else if (rarity === "UR") {
-                exp = exp_table_ur[level];
-            }
-            required_exp += exp;
+            required_exp += get_exp_table_entry(rarity, level);
         }
         if (same_attribute) {
             // feeding cards of same attribute get a 1.2x bonus, so reduce the needed exp by that
@@ -969,7 +974,7 @@ function calculate_card() {
         }
         var real_exp_to_feed = exp_to_feed;
         if (same_attribute) {
-            // feeding cards of same attribute get a 1.2x bonus, so reduce the needed exp by that
+            // feeding cards of same attribute get a 1.2x bonus, so account for that
             real_exp_to_feed = Math.round(real_exp_to_feed * 1.2);
         }
         // ready to rock
@@ -978,16 +983,7 @@ function calculate_card() {
         var exp_tally = current_exp;
         var level = 0;
         for (level = current_level + 1; level <= get_level_cap(rarity); level++) {
-            var exp_temp = 0;
-            if (rarity === "N") {
-                exp_tally += exp_table_n[level];
-            } else if (rarity === "R") {
-                exp_tally += exp_table_r[level];
-            } else if (rarity === "SR") {
-                exp_tally += exp_table_sr[level];
-            } else if (rarity === "UR") {
-                exp_tally += exp_table_ur[level];
-            }
+            exp_tally += get_exp_table_entry(rarity, level);
             if (exp_tally > real_exp_to_feed) {
                 break;
             }
