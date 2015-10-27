@@ -90,23 +90,25 @@ def cleanup(signal, frame):
 ##############################################################################################
 
 def send_to_line(string):
-  split_string = string.splitlines()
-  astring = """
+  # first sanitise it
+  sanitised_string = string.replace('"', '\\"')
+  split_string = sanitised_string.splitlines()
+  script = """
   activate application "LINE"
   tell application "System Events"
   """
   for s in split_string:
-    astring += """
+    script += """
     keystroke "%s"
     keystroke return using control down
     """ % s
-  astring += """
+  script += """
     keystroke return
     delay 0.5
   end tell
   activate application "iTerm"
   """
-  asrun(astring)
+  asrun(script)
 
 ##############################################################################################
 # Clock
@@ -129,19 +131,27 @@ def clock():
   global t2_diff
   screen.addstr(0, 0, time.strftime("%d/%m/%Y %H:%M:%S"))
   if not event_pending and not in_event:
+    screen.addstr(2, 0, " " * width)
     screen.addstr(2, 0, "status: idle")
     screen.addstr(4, 0, " " * width)
     screen.addstr(5, 0, " " * width)
     screen.addstr(6, 0, " " * width)
   elif event_pending:
+    screen.addstr(2, 0, " " * width)
     screen.addstr(2, 0, "status: event pending")
+    screen.addstr(4, 0, " " * width)
     screen.addstr(4, 0, "\"%s\"" % event_name)
+    screen.addstr(5, 0, " " * width)
     screen.addstr(5, 0, "time period: %s" % event_duration)
     screen.addstr(6, 0, " " * width)
   elif in_event:
+    screen.addstr(2, 0, " " * width)
     screen.addstr(2, 0, "status: event active")
-    screen.addstr(4, 0, "\"%s\" (%d%% complete)" % (event_name, pct_done))
+    screen.addstr(4, 0, " " * width)
+    screen.addstr(4, 0, "\"%s\" (%s complete)" % (event_name, pct_done))
+    screen.addstr(5, 0, " " * width)
     screen.addstr(5, 0, "Tier 1: %d (%s)" % (t1, t1_diff))
+    screen.addstr(6, 0, " " * width)
     screen.addstr(6, 0, "Tier 2: %d (%s)" % (t2, t2_diff))
   screen.refresh()
 
@@ -150,6 +160,7 @@ def clock():
 ##############################################################################################
 
 def poll():
+  global pattern
   global screen
   global width
   global height
@@ -174,25 +185,36 @@ def poll():
   string_to_send = ""
 
   # simplistic parsing
-  if u"New Event Announced" in desc_stripped and not event_pending:
-    # new event - split it
-    split_string = desc_stripped.splitlines()
-    # name is in item1, time is item2
-    event_name = split_string[1]
-    event_duration = split_string[2]
-    #print "New event detected:"
-    #print "Name: %s" % event_name
-    #print "Time period: %s" % event_time
-    string_to_send = """New Event Announcement!\n"%s"\n%s""" % (event_name, event_duration)
-    # don't keep yammering on until the event actually starts
-    event_pending = True
-    in_event = False
+  # also a kinda dorky (and possibly broken) state machine
+  # should really rewrite this eventually, but want to get it working first :P
+  if u"New Event Announced":
+  	if not event_pending:
+	    # new event - split it
+	    split_string = desc_stripped.splitlines()
+	    # name is in item1, time is item2
+	    event_name = split_string[1]
+	    event_duration = split_string[2]
+	    #print "New event detected:"
+	    #print "Name: %s" % event_name
+	    #print "Time period: %s" % event_time
+	    string_to_send = """New Event Announcement!\n\n"%s"\n\n%s""" % (event_name, event_duration)
+	    # don't keep yammering on until the event actually starts
+	    event_pending = True
+	    in_event = False
   elif u"ＦＩＮＡＬ" in desc_stripped and in_event:
     in_event = False
-    string_to_send = """Event Has Ended! "%s" has ended. Final numbers: blah""" % event_name
+    string_to_send = """Event Has Ended!\n\n"%s" has ended.\n\nFinal numbers:\n\nTier 1: %d (diff: %s)\nTier 2: %d (diff: %s)\n\nAs of: %s\n\n""" % (event_name, t1, t1_diff, t2, t2_diff, update_time)
+  else:
+  	# if it's not final and not announce, then assume it's a bona fide event update
+  	event_pending = False
+  	in_event = True
+  	results = re.findall(pattern, desc_stripped)
+	if results:
+	    (event_name, tier1_s, t1_diff, tier2_s, t2_diff, update_time, pct_done) = results[0]
+	    t1 = int(tier1_s)
+	    t2 = int(tier2_s)
+	    string_to_send = """\n"%s" (%s complete)\n\nTier 1: %d (diff: %s)\nTier 2: %d (diff: %s)\n\nAs of: %s\n\n""" % (event_name, pct_done, t1, t1_diff, t2, t2_diff, update_time)
   if string_to_send:
-    # sanitise it
-    string_to_send = string_to_send.replace('"', '\\"')
     send_to_line(string_to_send)
   screen.addstr(0, width-11, "           ")
   screen.refresh()
@@ -220,10 +242,9 @@ t1 = 0
 t1_diff = ""
 t2 = 0
 t2_diff = ""
+pattern = re.compile("^(.*) Tier 1: (\d+)pts（([+-]\d+)）.*Tier 2: (\d+)pts（([+-]\d+)）.*Time: (.*)（([\d\.%]+)）")
 
 # disable logging
-# my_filter = NoRunningFilter()
-# logging.getLogger("apscheduler.scheduler").addFilter(my_filter)
 logging.basicConfig()
 
 # setup signal handler
@@ -235,14 +256,11 @@ sched.daemonic = False
 
 # add some jobs
 clock_job = sched.add_job(clock, 'interval', seconds=1)
-poll_job = sched.add_job(poll, 'interval', seconds=10)
-#poll_job = sched.add_job(poll, 'cron', minute=40)
+# poll_job = sched.add_job(poll, 'interval', seconds=1)		# use for testing only! REALLY resource expensive
+poll_job = sched.add_job(poll, 'interval', minutes=1)		# use for testing only!
+# poll_job = sched.add_job(poll, 'cron', minute=40)			# use for production
 
-#print "job scheduled"
-
-# Kick it off
-#print "START"
-
+# start the scheduler
 sched.start()
 
-#print "END"
+# never exits (quit the script using control-c)
