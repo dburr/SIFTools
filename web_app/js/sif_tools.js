@@ -27,7 +27,6 @@
 // * Card Level Calc:
 //   - maybe also the super (1.5) and ultra (2.0) success bonuses too?
 // * Event Tracker:
-//   - if time remaining < 24 don't put parenthesis around the hours/minutes/seconds display
 //   - @sifen_trackbot update code gets "stuck" sometimes - not sure if the problem
 //     is in the twitter fetcher or elsewhere
 
@@ -1049,14 +1048,16 @@ function run_timer() {
         if (total_hours >= 24) {
             time_till += sprintf("%d hours<br />", total_hours);
         }
-        time_till += "(";
+        if (total_hours >= 24)  {
+            time_till += "(";
+        }
         if (days >= 1) {
             time_till += sprintf("%d day%s ", days, days > 1 ? "s" : "");
         }
         if (hours >= 1) {
             time_till += sprintf("%d hour%s ", hours, hours > 1 ? "s" : "");
         }
-        time_till += sprintf("%d minute%s %d second%s)</h2>", minutes, minutes > 1 ? "s" : "", seconds, seconds > 1 ? "s" : "");
+        time_till += sprintf("%d minute%s %d second%s%s</h2>", minutes, minutes > 1 ? "s" : "", seconds, (seconds > 1 ? "s" : ""), (total_hours >= 24) ? ")" : "");
         // d.asDays() + " days " + d.asHours() + moment.utc(ms).format(":mm:ss");
         // var time_till = moment.utc(end.diff(now)).format("HH:mm:ss");//.format("HH:mm:ss");
         string += "<h1>TIME REMAINING:</h1><h2>" + time_till + "</H2>";
