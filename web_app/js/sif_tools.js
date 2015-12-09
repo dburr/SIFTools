@@ -362,6 +362,15 @@ function calculate_rank() {
         var normal_count = Math.round(required_exp / 26);
         var hard_count = Math.round(required_exp / 46);
         var expert_count = Math.round(required_exp / 83);
+        var m3_easy_count = Math.round(required_exp / (12*3));
+        var m3_normal_count = Math.round(required_exp / (26*3));
+        var m3_hard_count = Math.round(required_exp / (46*3));
+        var m3_expert_count = Math.round(required_exp / (83*3));
+        // Increases the amount of EXP gained by 10%.
+        var m3b_easy_count = Math.round(required_exp / (12*1.1*3));
+        var m3b_normal_count = Math.round(required_exp / (26*1.1*3));
+        var m3b_hard_count = Math.round(required_exp / (46*1.1*3));
+        var m3b_expert_count = Math.round(required_exp / (83*1.1*3));
         // calc LP and FP
         var LP = 25 + Math.floor(Math.min(desired_rank, 300) / 2) + Math.floor(Math.max(desired_rank - 300, 0) / 3);
         // calc friend slots
@@ -372,6 +381,14 @@ function calculate_rank() {
         $("#rank-result-songs-normal").text(normal_count);
         $("#rank-result-songs-hard").text(hard_count);
         $("#rank-result-songs-expert").text(expert_count);
+        $("#rank-result-songs-easy-mf").text(m3_easy_count);
+        $("#rank-result-songs-normal-mf").text(m3_normal_count);
+        $("#rank-result-songs-hard-mf").text(m3_hard_count);
+        $("#rank-result-songs-expert-mf").text(m3_expert_count);
+        $("#rank-result-songs-easy-mfb").text(m3b_easy_count);
+        $("#rank-result-songs-normal-mfb").text(m3b_normal_count);
+        $("#rank-result-songs-hard-mfb").text(m3b_hard_count);
+        $("#rank-result-songs-expert-mfb").text(m3b_expert_count);
         // rank-results-lp">-</span> LP and <span id="rank-results-fp
         $("#rank-results-lp").text(LP);
         $("#rank-results-fp").text(friend_slots);
