@@ -970,15 +970,17 @@ function calculate_card() {
         for (level = current_level + 1; level <= target_level; level++) {
             required_exp += get_exp_table_entry(rarity, level);
         }
-        if (same_attribute) {
-            // feeding cards of same attribute get a 1.2x bonus, so reduce the needed exp by that
-            required_exp = Math.floor(required_exp / 1.2);
-        }
         // subtract what we have
         required_exp -= current_exp;
         var resultString = sprintf("To get a %s card from level %d (with %d EXP) to %d requires %d EXP.<br />", rarity, current_level, current_exp, target_level, required_exp);
         // calculate equiv N cards
-        var number_of_n_cards = Math.round(required_exp / 100) + 1;
+        // FINDME
+        if (same_attribute) {
+          n_card_factor = 120;
+        } else {
+          n_card_factor = 100;
+        }
+        var number_of_n_cards = Math.round(required_exp / n_card_factor) + 1;
         resultString += sprintf("(the equivalent of about %d level-1 N cards fed to it)", number_of_n_cards);
         // output the result
         $("#card-result-summary").html(resultString);
@@ -989,12 +991,8 @@ function calculate_card() {
             return;
         }
         var real_exp_to_feed = exp_to_feed;
-        if (same_attribute) {
-            // feeding cards of same attribute get a 1.2x bonus, so account for that
-            real_exp_to_feed = Math.round(real_exp_to_feed * 1.2);
-        }
         // ready to rock
-        var resultsString = "FOO";
+        var resultsString = "";
         // XXX do some calculating
         var exp_tally = current_exp;
         var level = 0;
