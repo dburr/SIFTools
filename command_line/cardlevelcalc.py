@@ -87,10 +87,10 @@ def calc_exp_for_level(rarity, starting_level, starting_exp, desired_level):
     # subtract what we already have
     required_exp = required_exp - starting_exp
     # now tell the user
-    print "To get a %s card from level %d (with %d EXP) to %d requires %d EXP." % (rarity, starting_level, starting_exp, desired_level, required_exp)
+    print("To get a %s card from level %d (with %d EXP) to %d requires %d EXP." % (rarity, starting_level, starting_exp, desired_level, required_exp))
     # calculate equivalent N cards (round up because we can't feed half of a card)
     number_of_n_cards = (required_exp // 100) + 1
-    print "(the equivalent of about %d level-1 N cards fed to it)" % number_of_n_cards
+    print("(the equivalent of about %d level-1 N cards fed to it)" % number_of_n_cards)
 
 def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
     current_exp = starting_exp
@@ -121,25 +121,25 @@ def calc_level_for_exp(rarity, starting_level, starting_exp, level_for_exp):
             max_level_string = " (MAX LEVEL!)"
         else:
             max_level_string = ""
-        print "If you feed a %s card at level %d (with %d EXP) a total of %d EXP,\nit will end up at level %d.%s" % (rarity, starting_level, starting_exp, level_for_exp, level, max_level_string)
+        print("If you feed a %s card at level %d (with %d EXP) a total of %d EXP,\nit will end up at level %d.%s" % (rarity, starting_level, starting_exp, level_for_exp, level, max_level_string))
     else:
-        print "Feeding %d EXP to a level %d %s card (with %d EXP) is not sufficient to\nlevel it up." % (level_for_exp, starting_level, rarity, starting_exp)
+        print("Feeding %d EXP to a level %d %s card (with %d EXP) is not sufficient to\nlevel it up." % (level_for_exp, starting_level, rarity, starting_exp))
 
 def usage():
-    print "Usage: %s [options]" % os.path.basename(__file__)
-    print "where [options] can be one or more of:"
-    print "[-H | --help]            Print this help message"
-    print "[-r | --rarity]          Card's rarity (REQUIRED, must be one of: N, R, SR, UR)"
-    print "[-l | --starting-level]  Card's starting level (REQUIRED)"
-    print "[-e | --starting-exp]    Card's starting EXP (optional, defaults to 0)"
-    print ""
-    print "Plus one of the following:"
-    print ""
-    print "TO CALCULATE AMOUNT OF EXP NEEDED TO GET TO A LEVEL:"
-    print "[-L | --desired-level]   Card's desired level"
-    print ""
-    print "TO CALCULATE WHAT LEVEL A GIVEN AMOUNT OF XP WILL GET YOU TO:"
-    print "[-x | --level-for-exp]   Calculate level that card will be at given EXP"
+    print("Usage: %s [options]" % os.path.basename(__file__))
+    print("where [options] can be one or more of:")
+    print("[-H | --help]            Print this help message")
+    print("[-r | --rarity]          Card's rarity (REQUIRED, must be one of: N, R, SR, UR)")
+    print("[-l | --starting-level]  Card's starting level (REQUIRED)")
+    print("[-e | --starting-exp]    Card's starting EXP (optional, defaults to 0)")
+    print("")
+    print("Plus one of the following:")
+    print("")
+    print("TO CALCULATE AMOUNT OF EXP NEEDED TO GET TO A LEVEL:")
+    print("[-L | --desired-level]   Card's desired level")
+    print("")
+    print("TO CALCULATE WHAT LEVEL A GIVEN AMOUNT OF XP WILL GET YOU TO:")
+    print("[-x | --level-for-exp]   Calculate level that card will be at given EXP")
 
 def main(argv):
     rarity = None
@@ -169,49 +169,49 @@ def main(argv):
 
     # first validate rarity
     if rarity is None:
-        print "Error: must specify rarity"
+        print("Error: must specify rarity")
         usage()
         sys.exit(1)
     else:
         # canonicalize it to uppercase
         rarity = rarity.upper()
         if rarity != "N" and rarity != "R" and rarity != "SR" and rarity != "UR":
-            print "Error: invalid rarity specified (%s)" % rarity
+            print("Error: invalid rarity specified (%s)" % rarity)
             usage()
             sys.exit(1)
 
     # now validate starting level
     if starting_level is None:
-        print "Error: must specify starting level"
+        print("Error: must specify starting level")
         usage()
         sys.exit(1)
     elif not check_level_cap(rarity, starting_level):
-        print "Error: invalid starting level: %d" % starting_level
+        print("Error: invalid starting level: %d" % starting_level)
         usage()
         sys.exit(1)
 
     # now validate starting level
     if desired_level is None and level_for_exp is None:
-        print "Error: you must choose one of -L or -x."
+        print("Error: you must choose one of -L or -x.")
         usage()
         sys.exit(1)
 
     # determine mode
     if desired_level is not None:
         if not check_level_cap(rarity, desired_level):
-            print "Error: invalid desired level: %d" % desired_level
+            print("Error: invalid desired level: %d" % desired_level)
             usage()
             sys.exit(1)
             
         # now do start+desired levels make sense?
         if desired_level <= starting_level:
-            print "Error: desired level must be greater than starting level"
+            print("Error: desired level must be greater than starting level")
             usage()
             sys.exit(1)
         
         # finally check to see if exp makes sense (can't be >= the number of exp for the next level)
         if not check_valid_exp(rarity, desired_level, starting_exp):
-            print "Error: invalid EXP (%d)" % starting_exp
+            print("Error: invalid EXP (%d)" % starting_exp)
             usage()
             sys.exit(1)
             

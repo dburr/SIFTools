@@ -42,7 +42,7 @@ def center(string):
     global height
     string_length = len(string)
     horizontal_space = (width // 2) - (string_length // 2)
-    print "%s%s" % ((" " * horizontal_space), string)
+    print("%s%s" % ((" " * horizontal_space), string))
 
 # NOTE: OS DEPENDENT SECTION - this basically returns a tuple containing the screen's size
 # (width,height). This code will work on Mac OS X systems and probably Linux as well, but
@@ -94,7 +94,7 @@ def calc(year, month, day, hour, minute, fullscreen = False):
         absolutely_unused_variable = os.system("clear") 
         number_of_blank_lines = (height // 2) - (8 // 2) + 1
         for x in range(1, number_of_blank_lines):
-            print ""
+            print("")
         center("CURRENT TIME")
         center(today.strftime("%Y-%m-%d %H:%M:%S UTC"))
         print("")
@@ -109,18 +109,18 @@ def calc(year, month, day, hour, minute, fullscreen = False):
         skip_lines = number_of_blank_lines
         if today_minute == 35:
             skip_lines = skip_lines - 3
-            print ""
+            print("")
             center("Check @sifen_trackbot for a tier update:")
             center("https://twitter.com/sifen_trackbot")
         if hours > 0 and hours < 6:
             skip_lines = skip_lines - 2
-            print ""
+            print("")
             center("*** THE RUSH IS ON!!! ***")
         if today_hour == 0 and today_minute == 0:
             skip_lines = skip_lines - 2
-            print ""
+            print("")
             if today_seconds % 2 == 0:
-                print ""
+                print("")
             else:
                 # NOTE: OS DEPENDENT SECTION - this commands plays an alert sound on Mac OS X machines.
                 # You will need to change it to a different command that plays a sound on Linux or Windows machines.
@@ -128,28 +128,28 @@ def calc(year, month, day, hour, minute, fullscreen = False):
                 absolutely_unused_variable = os.system("afplay /System/Library/Sounds/Glass.aiff 2>/dev/null &")
                 center("*** Be sure and claim your daily Login Gift ***")
         for x in range(1, skip_lines):
-            print ""
+            print("")
     else:
-        print "  Current time: %s" % today.strftime("%Y-%m-%d %H:%M:%S UTC")
-        print "    Event ends: %04d-%02d-%02d %02d:%02d:%02d UTC" % (year, month, day, hour, minute, 0)
+        print("  Current time: %s" % today.strftime("%Y-%m-%d %H:%M:%S UTC"))
+        print("    Event ends: %04d-%02d-%02d %02d:%02d:%02d UTC" % (year, month, day, hour, minute, 0))
         if s <= 0:
-            print "Time remaining: *** EVENT HAS ENDED ***"
+            print("Time remaining: *** EVENT HAS ENDED ***")
         else:
-            print "Time remaining: %d:%02d:%02d (%dd%dh%dm)" % (hours, minutes, seconds, days, days_hours, days_minutes)
+            print("Time remaining: %d:%02d:%02d (%dd%dh%dm)" % (hours, minutes, seconds, days, days_hours, days_minutes))
             if hours < 6:
-                print "*** THE RUSH IS ON!!! ***"
+                print("*** THE RUSH IS ON!!! ***")
 
 def usage():
-    print "Usage: %s [options]" % os.path.basename(__file__)
-    print "where [options] can be one or more of:"
-    print "     [-H | --help]       Print this help message"
-    print "     [-y | --year]       Event year (optional, defaults to current year)"
-    print "     [-M | --month]      Event month (optional, defaults to current month)"
-    print "     [-d | --day]        Event day (REQUIRED)"
-    print "     [-h | --hour]       Event hour (REQUIRED)"
-    print "     [-m | --minute]     Event minute (optional, defaults to 0)"
-    print "     [-c | --continuous] Continuously updating display (defaults to off)"
-    print "Note: event time should be specified in UTC."
+    print("Usage: %s [options]" % os.path.basename(__file__))
+    print("where [options] can be one or more of:")
+    print("     [-H | --help]       Print this help message")
+    print("     [-y | --year]       Event year (optional, defaults to current year)")
+    print("     [-M | --month]      Event month (optional, defaults to current month)")
+    print("     [-d | --day]        Event day (REQUIRED)")
+    print("     [-h | --hour]       Event hour (REQUIRED)")
+    print("     [-m | --minute]     Event minute (optional, defaults to 0)")
+    print("     [-c | --continuous] Continuously updating display (defaults to off)")
+    print("Note: event time should be specified in UTC.")
 
 def main(argv):      
     global scr
@@ -187,11 +187,11 @@ def main(argv):
             continuous_mode = True
             
     if day is None:
-        print "Error: must specify day"
+        print("Error: must specify day")
         usage()
         sys.exit(1)
     elif hour is None:
-        print "Error: must specify hour"
+        print("Error: must specify hour")
         usage()
         sys.exit(1)
     else:
